@@ -1,5 +1,6 @@
 import { Instance } from 'mobx-state-tree'
 import { TauriStorageEngine } from '../../services'
+import { setUpBundledApplicationWs } from '../bundled-application-store'
 import { Environment } from '../environment'
 import { RootStoreModel } from './root-store'
 import persist from './root-store-persist'
@@ -16,6 +17,8 @@ export async function setupRootStore() {
   const env = await Environment.create()
   const storage = TauriStorageEngine.create('.root-store.dat')
   const rootStore: Instance<typeof RootStoreModel> = RootStoreModel.create({}, env)
+
+  setUpBundledApplicationWs(rootStore.bundledApplicationStore)
 
   persist('rootStore', rootStore, {
     storage

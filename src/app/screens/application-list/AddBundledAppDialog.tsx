@@ -102,6 +102,7 @@ export const AddBundledAppDialog = observer(() => {
 
   const onSubmit = (data: BundledApplicationSnapshotIn) => {
     addBundledApplication(data)
+    onDismiss()
   }
 
   const onDismiss = () => {

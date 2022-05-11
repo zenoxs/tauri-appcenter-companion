@@ -1,0 +1,22 @@
+--- src/webview/wkwebview/mod.rs	1973-11-29 22:33:09.000000000 +0100
++++ src/webview/wkwebview/mod.rs	2022-05-10 16:11:15.000000000 +0200
+@@ -201,6 +201,7 @@
+       }
+     }
+     extern "C" fn stop_task(_: &Object, _: Sel, _webview: id, _task: id) {}
++    extern "C" fn scroll_wheel(_: &Object, _: Sel, _event: id) {}
+ 
+     // Safety: objc runtime calls are unsafe
+     unsafe {
+@@ -244,6 +245,13 @@
+         Some(mut decl) => {
+           #[cfg(target_os = "macos")]
+           add_file_drop_methods(&mut decl);
++          #[cfg(target_os = "macos")]
++          decl.add_method(
++            sel!(scrollWheel:),
++            scroll_wheel as extern "C" fn(&Object, Sel, id),
++           );
+           decl.register()
+         }
+         _ => class!(WryWebView),

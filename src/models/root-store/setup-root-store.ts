@@ -18,7 +18,7 @@ export async function setupRootStore() {
   const storage = TauriStorageEngine.create('.root-store.dat')
   const rootStore: Instance<typeof RootStoreModel> = RootStoreModel.create({}, env)
 
-  setUpBundledApplicationWs(rootStore.bundledApplicationStore)
+  setUpBundledApplicationWs(rootStore, env.appcenterApi)
 
   persist('rootStore', rootStore, {
     storage

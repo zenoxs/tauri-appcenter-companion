@@ -29,7 +29,7 @@ export interface CommitDto {
   sha: string
 }
 
-export interface LastBuildDto {
+export interface BuildDto {
   id: number
   buildNumber: string
   queueTime: Date
@@ -53,6 +53,6 @@ export interface BranchValueDto {
 export interface BranchDto {
   branch: BranchValueDto
   configured: boolean
-  lastBuild?: LastBuildDto
+  lastBuild?: BuildDto
   trigger?: string
 }

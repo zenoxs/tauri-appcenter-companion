@@ -4,7 +4,6 @@ import { ApplicationList } from '../screens/application-list/ApplicationList'
 import { Routes, Route, useNavigate, useLocation, Location } from 'react-router-dom'
 import './AppNavigator.css'
 import { APITokenListModal } from '../screens/api-token/APITokenListModal'
-import { useBoolean } from '@fluentui/react-hooks'
 import { AddBundledAppDialog } from '../screens/application-list/AddBundledAppDialog'
 
 const navStyles: Partial<INavStyles> = {
@@ -45,7 +44,6 @@ const navLinkGroups: INavLinkGroup[] = [
 ]
 
 export const AppNavigator = () => {
-  const [openAPITokenListModal, { toggle: toggleOpenAPITokenListModal }] = useBoolean(false)
   const theme = useContext(ThemeContext)!
   const navigate = useNavigate()
   const location = useLocation()
@@ -67,7 +65,7 @@ export const AppNavigator = () => {
           <CommandButton
             text='API Tokens'
             iconProps={{ iconName: 'Signin' }}
-            onClick={toggleOpenAPITokenListModal}
+            onClick={() => navigate('/api-tokens', { state: { backgroundLocation: location } })}
           />
         </Stack>
         <Stack
@@ -89,11 +87,11 @@ export const AppNavigator = () => {
           {state?.backgroundLocation && (
             <Routes>
               <Route path='/add-bundled-app' element={<AddBundledAppDialog />} />
+              <Route path='/api-tokens' element={<APITokenListModal />} />
             </Routes>
           )}
         </Stack>
       </Stack>
-      <APITokenListModal isOpen={openAPITokenListModal} onDismiss={toggleOpenAPITokenListModal} />
     </Stack>
   )
 }

@@ -12,6 +12,7 @@ import {
   Modal
 } from '@fluentui/react'
 import { observer } from 'mobx-react-lite'
+import { useNavigate } from 'react-router-dom'
 import { useBoolean, useConst, useId } from '@fluentui/react-hooks'
 import { Token, useStores } from '../../../models'
 import { AddAPITokenDialog } from './AddAPITokenDialog'
@@ -53,11 +54,6 @@ const iconButtonStyles: Partial<IButtonStyles> = {
   }
 }
 
-export interface APITokenListModalProps {
-  isOpen: boolean
-  onDismiss: () => void
-}
-
 const columns: Array<IColumn> = [
   {
     key: 'name',
@@ -79,12 +75,13 @@ const columns: Array<IColumn> = [
   }
 ]
 
-export const APITokenListModal = observer(({ isOpen, onDismiss }: APITokenListModalProps) => {
+export const APITokenListModal = observer(() => {
   const titleId = useId('title-api-token-list-modal')
   const [hideAPITokenDialog, { toggle: toggleHideAPITokenDialog }] = useBoolean(true)
   const {
     tokenStore: { tokens, removeToken }
   } = useStores()
+  const navigate = useNavigate()
   const [selectedTokens, setSelectedTokens] = useState<Array<Token>>([])
   const selection = useConst(
     () =>
@@ -97,13 +94,16 @@ export const APITokenListModal = observer(({ isOpen, onDismiss }: APITokenListMo
 
   const onRemoveTokens = () => {
     for (const token of selectedTokens) {
-      console.log(token)
       removeToken(token)
     }
   }
 
+  const onDismiss = () => {
+    navigate(-1)
+  }
+
   return (
-    <Modal titleAriaId={titleId} onDismiss={onDismiss} isOpen={isOpen}>
+    <Modal titleAriaId={titleId} onDismiss={onDismiss} isOpen={true}>
       {!hideAPITokenDialog && (
         <AddAPITokenDialog hidden={hideAPITokenDialog} onDismiss={toggleHideAPITokenDialog} />
       )}

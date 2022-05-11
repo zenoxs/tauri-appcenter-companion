@@ -61,9 +61,16 @@ export class AppWebSocketChannel {
       branch.application.name,
       branch.application.token!.token
     )
-    console.log(wsUrl)
-    return new AppWebSocketChannel(wsUrl, branch)
+    if (AppWebSocketChannel._openedWebSockets[branch.application.id]) {
+      return AppWebSocketChannel._openedWebSockets[branch.application.id]
+    }
+    const channel = new AppWebSocketChannel(wsUrl, branch)
+    AppWebSocketChannel._openedWebSockets[branch.application.id] = channel
+    return channel
   }
+
+  // eslint-disable-next-line no-use-before-define
+  static readonly _openedWebSockets: Record<string, AppWebSocketChannel> = {}
 
   private readonly _socket: WebSocket
   private readonly _heartbeatInterval: number

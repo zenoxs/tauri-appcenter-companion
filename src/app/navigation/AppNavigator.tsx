@@ -1,5 +1,13 @@
 import React, { useContext } from 'react'
-import { CommandButton, INavLinkGroup, INavStyles, Nav, Stack, ThemeContext } from '@fluentui/react'
+import {
+  CommandButton,
+  INavLinkGroup,
+  INavStyles,
+  Nav,
+  Stack,
+  Text,
+  ThemeContext
+} from '@fluentui/react'
 import { ApplicationList } from '../screens/application-list/ApplicationList'
 import { Routes, Route, useNavigate, useLocation, Location } from 'react-router-dom'
 import './AppNavigator.css'
@@ -8,6 +16,7 @@ import { AddBundledAppDialog } from '../screens/application-list/AddBundledAppDi
 
 const navStyles: Partial<INavStyles> = {
   root: {
+    marginTop: 20,
     width: 180,
     boxSizing: 'border-box',
     overflowY: 'auto'
@@ -20,7 +29,10 @@ const navStyles: Partial<INavStyles> = {
     backgroundColor: 'transparent'
   },
   link: {
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
+    '.ms-Nav-compositeLink:hover &': {
+      backgroundColor: 'transparent'
+    }
   }
 }
 
@@ -53,7 +65,10 @@ export const AppNavigator = () => {
     <Stack verticalFill styles={{ root: { height: '100vh', width: '100vw' } }}>
       <div className='titlebar' data-tauri-drag-region style={{ height: '35px' }}></div>
       <Stack className='container' grow horizontal styles={{ root: { display: 'flex' } }}>
-        <Stack verticalAlign='space-between'>
+        <Stack>
+          <Stack.Item align='center'>
+            <Text variant='xLarge'>AC Companion</Text>
+          </Stack.Item>
           <Nav
             onLinkClick={(event, link) => {
               event?.preventDefault()
@@ -62,6 +77,9 @@ export const AppNavigator = () => {
             styles={navStyles}
             groups={navLinkGroups}
           />
+          <Stack.Item verticalFill>
+            <span />
+          </Stack.Item>
           <CommandButton
             text='API Tokens'
             iconProps={{ iconName: 'Signin' }}

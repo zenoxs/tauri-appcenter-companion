@@ -2,6 +2,7 @@ import React, { createRef } from 'react'
 import { observer } from 'mobx-react-lite'
 import { Branch, useStores } from '../../../models'
 import {
+  CommandBar,
   ConstrainMode,
   DefaultButton,
   DetailsList,
@@ -16,7 +17,7 @@ import { useBoolean } from '@fluentui/react-hooks'
 
 export const ApplicationList = observer(() => {
   const {
-    bundledApplicationStore: { bundledApplications }
+    bundledApplicationStore: { bundledApplications, refresh }
   } = useStores()
   const detailsList = createRef<IDetailsList>()
   const [hideAddBunddledAppDialog, { toggle: toggleHideAddBundledAppDialog }] = useBoolean(true)
@@ -55,20 +56,30 @@ export const ApplicationList = observer(() => {
     items = items.concat(branches)
   }
 
-  const refresh = () => {
-    // applicationStore.fetchApplications()
-  }
-
   return (
     <>
       <AddBundledAppDialog
         hidden={hideAddBunddledAppDialog}
         onDismiss={toggleHideAddBundledAppDialog}
       />
-      <Stack horizontal>
-        <DefaultButton onClick={refresh} text='Refresh' />
-        <DefaultButton onClick={toggleHideAddBundledAppDialog} text='Add an item' />
-      </Stack>
+      <CommandBar
+        items={[
+          {
+            key: 'add',
+            text: 'Add',
+            iconProps: { iconName: 'Add' },
+            onClick: toggleHideAddBundledAppDialog
+          }
+        ]}
+        farItems={[
+          {
+            key: 'refresh',
+            iconProps: { iconName: 'Refresh' },
+            onClick: refresh
+          }
+        ]}
+        styles={{ root: { padding: 0 } }}
+      />
       <div>
         <DetailsList
           constrainMode={ConstrainMode.horizontalConstrained}

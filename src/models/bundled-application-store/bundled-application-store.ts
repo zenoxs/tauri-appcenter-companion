@@ -1,4 +1,5 @@
 import { Instance, SnapshotOut, types } from 'mobx-state-tree'
+import { Application } from '../application-store'
 import { withEnvironment } from '../extensions/extensions'
 import { BundledApplicationModel, BundledApplicationSnapshotIn } from './bundled-application'
 
@@ -14,6 +15,20 @@ export const BundledApplicationStoreModel = types
   .actions((self) => ({
     addBundledApplication(bundledApplication: BundledApplicationSnapshotIn) {
       self.bundledApplications.push(bundledApplication)
+    },
+    refresh() {
+      const appsToFetch: Record<string, Application> = {}
+      self.bundledApplications.forEach((bundledApplication) => {
+        bundledApplication.branches.forEach((branch) => {
+          if(branch?.application.id && !appsToFetch[branch.application.id]) {
+            appsToFetch[branch.application.id] = branch.application
+          }
+        })
+      })
+      for(const [_, application] of Object.entries(appsToFetch)) {
+        console.log('fetch application', application.name)
+        application.fetchBranches()
+      }
     }
   }))
 

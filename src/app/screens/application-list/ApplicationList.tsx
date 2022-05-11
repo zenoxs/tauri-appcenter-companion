@@ -10,15 +10,15 @@ import {
   IGroup,
   SelectionMode
 } from '@fluentui/react'
-import { AddBundledAppDialog } from './AddBundledAppDialog'
-import { useBoolean } from '@fluentui/react-hooks'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 export const ApplicationList = observer(() => {
   const {
     bundledApplicationStore: { bundledApplications, refresh }
   } = useStores()
   const detailsList = createRef<IDetailsList>()
-  const [hideAddBunddledAppDialog, { toggle: toggleHideAddBundledAppDialog }] = useBoolean(true)
+  const navigate = useNavigate()
+  const location = useLocation()
 
   const columns: Array<IColumn> = [
     {
@@ -56,17 +56,13 @@ export const ApplicationList = observer(() => {
 
   return (
     <>
-      <AddBundledAppDialog
-        hidden={hideAddBunddledAppDialog}
-        onDismiss={toggleHideAddBundledAppDialog}
-      />
       <CommandBar
         items={[
           {
             key: 'add',
             text: 'Add',
             iconProps: { iconName: 'Add' },
-            onClick: toggleHideAddBundledAppDialog
+            onClick: () => navigate('/add-bundled-app', { state: { backgroundLocation: location } })
           }
         ]}
         farItems={[

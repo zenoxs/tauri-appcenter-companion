@@ -3,7 +3,7 @@ import './App.css'
 import { RootStore } from '../models/root-store/root-store'
 import { RootStoreProvider, setupRootStore } from '../models'
 import { DarkTheme, DefaultTheme } from '@uifabric/theme-samples'
-import { Navigation } from './navigation/Navigation'
+import { AppNavigator } from './navigation/AppNavigator'
 import { ThemeProvider } from '@fluentui/react'
 
 export const App: React.FunctionComponent = () => {
@@ -34,7 +34,7 @@ export const App: React.FunctionComponent = () => {
   return (
     <RootStoreProvider value={rootStore}>
       <ThemeProvider theme={isDarkMode ? DarkTheme : DefaultTheme} applyTo='body'>
-        <Navigation />
+        <AppNavigator />
       </ThemeProvider>
     </RootStoreProvider>
   )

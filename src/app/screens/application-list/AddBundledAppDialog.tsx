@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect } from 'react'
 import {
   DefaultButton,
   DetailsHeader,
@@ -15,16 +15,11 @@ import {
   Selection,
   Dropdown
 } from '@fluentui/react'
+import { useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import { useForm, Controller } from 'react-hook-form'
 import { Branch, BundledApplicationSnapshotIn, useStores } from '../../../models'
 import { useConst } from '@fluentui/react-hooks'
-import { toJS } from 'mobx'
-
-export interface AddBundledAppDialogProps {
-  hidden: boolean
-  onDismiss: () => void
-}
 
 const columns = [
   {
@@ -37,12 +32,14 @@ const columns = [
   }
 ]
 
-export const AddBundledAppDialog = observer(({ hidden, onDismiss }: AddBundledAppDialogProps) => {
+export const AddBundledAppDialog = observer(() => {
   const {
-    applicationStore: { fetchApplications, applicationsByToken, applicationList },
+    applicationStore: { fetchApplications, applicationsByToken },
     bundledApplicationStore: { addBundledApplication },
     tokenStore: { tokens }
   } = useStores()
+
+  const navigate = useNavigate()
 
   const {
     register,
@@ -75,10 +72,10 @@ export const AddBundledAppDialog = observer(({ hidden, onDismiss }: AddBundledAp
   )
 
   useEffect(() => {
-    if (!hidden && selectedToken) {
+    if (selectedToken) {
       fetchApplications(selectedToken, { withBranches: true })
     }
-  }, [hidden, selectedToken])
+  }, [selectedToken])
 
   const [items, groups] = (() => {
     let items: Array<Branch> = []
@@ -105,12 +102,15 @@ export const AddBundledAppDialog = observer(({ hidden, onDismiss }: AddBundledAp
 
   const onSubmit = (data: BundledApplicationSnapshotIn) => {
     addBundledApplication(data)
-    onDismiss()
+  }
+
+  const onDismiss = () => {
+    navigate(-1)
   }
 
   return (
     <Dialog
-      hidden={hidden}
+      hidden={false}
       onDismiss={onDismiss}
       dialogContentProps={{
         type: DialogType.largeHeader,

@@ -1,9 +1,11 @@
 import React, { useContext } from 'react'
 import { CommandButton, INavLinkGroup, INavStyles, Nav, Stack, ThemeContext } from '@fluentui/react'
 import { ApplicationList } from '../screens/application-list/ApplicationList'
-import './Navigation.css'
+import { Routes, Route, useNavigate, useLocation, Location } from 'react-router-dom'
+import './AppNavigator.css'
 import { APITokenListModal } from '../screens/api-token/APITokenListModal'
 import { useBoolean } from '@fluentui/react-hooks'
+import { AddBundledAppDialog } from '../screens/application-list/AddBundledAppDialog'
 
 const navStyles: Partial<INavStyles> = {
   root: {
@@ -19,7 +21,7 @@ const navStyles: Partial<INavStyles> = {
     backgroundColor: 'transparent'
   },
   link: {
-    // backgroundColor: 'rgba(0,0,0,0.3)'
+    backgroundColor: 'transparent'
   }
 }
 
@@ -28,31 +30,40 @@ const navLinkGroups: INavLinkGroup[] = [
     links: [
       {
         name: 'Applications',
-        url: 'http://example.com',
-        key: 'key3',
-        icon: 'AllApps',
-        target: '_blank'
+        key: 'aplications',
+        url: '/',
+        icon: 'AllApps'
       },
       {
         name: 'Buid',
-        url: 'http://msn.com',
-        key: 'key4',
-        icon: 'Build',
-        target: '_blank'
+        url: '/build',
+        key: 'build',
+        icon: 'Build'
       }
     ]
   }
 ]
 
-export const Navigation = () => {
+export const AppNavigator = () => {
   const [openAPITokenListModal, { toggle: toggleOpenAPITokenListModal }] = useBoolean(false)
   const theme = useContext(ThemeContext)!
+  const navigate = useNavigate()
+  const location = useLocation()
+  const state = location.state as { backgroundLocation?: Location }
+
   return (
     <Stack verticalFill styles={{ root: { height: '100vh', width: '100vw' } }}>
       <div className='titlebar' data-tauri-drag-region style={{ height: '35px' }}></div>
       <Stack className='container' grow horizontal styles={{ root: { display: 'flex' } }}>
         <Stack verticalAlign='space-between'>
-          <Nav onLinkClick={() => null} styles={navStyles} groups={navLinkGroups} />
+          <Nav
+            onLinkClick={(event, link) => {
+              event?.preventDefault()
+              return navigate(link?.url ?? '/')
+            }}
+            styles={navStyles}
+            groups={navLinkGroups}
+          />
           <CommandButton
             text='API Tokens'
             iconProps={{ iconName: 'Signin' }}
@@ -72,7 +83,14 @@ export const Navigation = () => {
           }}
           tokens={{ padding: theme.spacing.m }}
         >
-          <ApplicationList />
+          <Routes location={state?.backgroundLocation ?? location}>
+            <Route path='/' element={<ApplicationList />} />
+          </Routes>
+          {state?.backgroundLocation && (
+            <Routes>
+              <Route path='/add-bundled-app' element={<AddBundledAppDialog />} />
+            </Routes>
+          )}
         </Stack>
       </Stack>
       <APITokenListModal isOpen={openAPITokenListModal} onDismiss={toggleOpenAPITokenListModal} />

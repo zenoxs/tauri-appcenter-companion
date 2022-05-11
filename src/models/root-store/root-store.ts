@@ -1,6 +1,7 @@
 import { SnapshotOut, types } from 'mobx-state-tree'
 import { ApplicationStore, ApplicationStoreModel } from '../application-store'
 import { BranchStore, BranchStoreModel } from '../branch-store'
+import { BuildStore, BuildStoreModel } from '../build-store'
 import { BundledApplicationStore, BundledApplicationStoreModel } from '../bundled-application-store'
 import { OwnerStore, OwnerStoreModel } from '../owner-store'
 import { TokenStore, TokenStoreModel } from '../token-store'
@@ -13,7 +14,8 @@ export const RootStoreModel = types.model('RootStore').props({
   applicationStore: types.optional(ApplicationStoreModel, {}),
   ownerStore: types.optional(OwnerStoreModel, {}),
   branchStore: types.optional(BranchStoreModel, {}),
-  tokenStore: types.optional(TokenStoreModel, {})
+  tokenStore: types.optional(TokenStoreModel, {}),
+  buildStore: types.optional(BuildStoreModel, {})
 })
 
 /**
@@ -25,6 +27,7 @@ export interface RootStore {
   ownerStore: OwnerStore
   branchStore: BranchStore
   tokenStore: TokenStore
+  buildStore: BuildStore
 }
 
 /**

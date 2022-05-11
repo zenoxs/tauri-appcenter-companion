@@ -26,7 +26,6 @@ export const BundledApplicationStoreModel = types
         })
       })
       for(const [_, application] of Object.entries(appsToFetch)) {
-        console.log('fetch application', application.name)
         application.fetchBranches()
       }
     }

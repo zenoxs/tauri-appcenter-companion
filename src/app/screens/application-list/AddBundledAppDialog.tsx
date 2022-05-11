@@ -19,6 +19,7 @@ import { observer } from 'mobx-react-lite'
 import { useForm, Controller } from 'react-hook-form'
 import { Branch, BundledApplicationSnapshotIn, useStores } from '../../../models'
 import { useConst } from '@fluentui/react-hooks'
+import { toJS } from 'mobx'
 
 export interface AddBundledAppDialogProps {
   hidden: boolean
@@ -38,7 +39,7 @@ const columns = [
 
 export const AddBundledAppDialog = observer(({ hidden, onDismiss }: AddBundledAppDialogProps) => {
   const {
-    applicationStore: { fetchApplications, applicationsByToken },
+    applicationStore: { fetchApplications, applicationsByToken, applicationList },
     bundledApplicationStore: { addBundledApplication },
     tokenStore: { tokens }
   } = useStores()
@@ -79,7 +80,7 @@ export const AddBundledAppDialog = observer(({ hidden, onDismiss }: AddBundledAp
     }
   }, [hidden, selectedToken])
 
-  const [items, groups] = useMemo(() => {
+  const [items, groups] = (() => {
     let items: Array<Branch> = []
     const groups: Array<IGroup> = []
     if (!selectedToken) {
@@ -100,7 +101,7 @@ export const AddBundledAppDialog = observer(({ hidden, onDismiss }: AddBundledAp
     }
 
     return [items, groups]
-  }, [selectedToken])
+  })()
 
   const onSubmit = (data: BundledApplicationSnapshotIn) => {
     addBundledApplication(data)

@@ -25,7 +25,7 @@ export const ApplicationStoreModel = types
   .extend(withRootStore)
   .actions((self) => ({
     fetchApplications: flow(function* (token: string, options?: { withBranches: boolean }) {
-      console.log(token)
+      self.applications.clear()
       const dto: Array<ApplicationDto> = yield self.environment.appcenterApi.getApplications(token)
       const addedApplications = []
       for (const applicationDdto of dto) {

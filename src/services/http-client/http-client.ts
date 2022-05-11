@@ -21,7 +21,7 @@ export class HttpClient {
     return this._client.get<T>(this._baseUrl + url, options)
   }
 
-  post<T>(url: string, body: http.Body, options?: http.RequestOptions) {
+  post<T>(url: string, body?: http.Body, options?: http.RequestOptions) {
     return this._client.post<T>(this._baseUrl + url, body, options)
   }
 

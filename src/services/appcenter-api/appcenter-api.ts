@@ -44,4 +44,15 @@ export class AppcenterApi {
         return res.data
       })
   }
+
+  async getWebsocket(ownerName: string, applicationName: string, token: string) {
+    return this._http
+      .post<{ url: string }>(`apps/${ownerName}/${applicationName}/websockets`, undefined, {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Token': token
+        }
+      })
+      .then((res) => res.data.url)
+  }
 }

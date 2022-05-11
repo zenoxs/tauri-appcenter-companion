@@ -4,13 +4,11 @@ import { Branch, useStores } from '../../../models'
 import {
   CommandBar,
   ConstrainMode,
-  DefaultButton,
   DetailsList,
   IColumn,
   IDetailsList,
   IGroup,
-  SelectionMode,
-  Stack
+  SelectionMode
 } from '@fluentui/react'
 import { AddBundledAppDialog } from './AddBundledAppDialog'
 import { useBoolean } from '@fluentui/react-hooks'

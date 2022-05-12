@@ -1,4 +1,4 @@
-import React, { createRef, useEffect } from 'react'
+import React, { createRef, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { Branch, useStores } from '../../../models'
 import {
@@ -9,6 +9,7 @@ import {
   IColumn,
   IDetailsList,
   IGroup,
+  ProgressIndicator,
   SelectionMode
 } from '@fluentui/react'
 import { useNavigate, useLocation } from 'react-router-dom'
@@ -21,8 +22,18 @@ export const ApplicationList = observer(() => {
   const detailsList = createRef<IDetailsList>()
   const navigate = useNavigate()
   const location = useLocation()
+  const [isLoading, setIsLoading] = useState(false)
 
-  useEffect(() => refresh(), [])
+  const onRefresh = () => {
+    setIsLoading(true)
+    refresh().finally(() => {
+      setIsLoading(false)
+    })
+  }
+
+  useEffect(() => {
+    onRefresh()
+  }, [])
 
   const columns: Array<IColumn> = [
     {
@@ -91,12 +102,20 @@ export const ApplicationList = observer(() => {
           {
             key: 'refresh',
             iconProps: { iconName: 'Refresh' },
-            onClick: refresh
+            onClick: onRefresh
           }
         ]}
         styles={{ root: { padding: 0 } }}
       />
       <div>
+        {isLoading && (
+          <ProgressIndicator
+            progressHidden={false}
+            barHeight={2}
+            styles={{ itemProgress: { padding: 0 } }}
+          />
+        )}
+        {!isLoading && <div style={{ height: 2 }} />}
         <DetailsList
           constrainMode={ConstrainMode.horizontalConstrained}
           selectionMode={SelectionMode.none}

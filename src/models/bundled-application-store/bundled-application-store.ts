@@ -1,4 +1,4 @@
-import { Instance, SnapshotOut, types } from 'mobx-state-tree'
+import { flow, Instance, SnapshotOut, types } from 'mobx-state-tree'
 import { Application } from '../application-store'
 import { withEnvironment } from '../extensions/extensions'
 import { BundledApplicationModel, BundledApplicationSnapshotIn } from './bundled-application'
@@ -16,7 +16,7 @@ export const BundledApplicationStoreModel = types
     addBundledApplication(bundledApplication: BundledApplicationSnapshotIn) {
       self.bundledApplications.push(bundledApplication)
     },
-    refresh() {
+    refresh: flow(function* () {
       const appsToFetch: Record<string, Application> = {}
       self.bundledApplications.forEach((bundledApplication) => {
         bundledApplication.branches.forEach((branch) => {
@@ -25,10 +25,8 @@ export const BundledApplicationStoreModel = types
           }
         })
       })
-      for (const [, application] of Object.entries(appsToFetch)) {
-        application.fetchBranches()
-      }
-    }
+      yield Promise.all(Object.entries(appsToFetch).map(([, app]) => app.fetchBranches()))
+    })
   }))
 
 /**

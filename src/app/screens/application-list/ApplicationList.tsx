@@ -1,16 +1,18 @@
-import React, { createRef } from 'react'
+import React, { createRef, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { Branch, useStores } from '../../../models'
 import {
   CommandBar,
   ConstrainMode,
   DetailsList,
+  DetailsRow,
   IColumn,
   IDetailsList,
   IGroup,
   SelectionMode
 } from '@fluentui/react'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { BuildStatusIndicator } from '../../components'
 
 export const ApplicationList = observer(() => {
   const {
@@ -19,6 +21,8 @@ export const ApplicationList = observer(() => {
   const detailsList = createRef<IDetailsList>()
   const navigate = useNavigate()
   const location = useLocation()
+
+  useEffect(() => refresh(), [])
 
   const columns: Array<IColumn> = [
     {
@@ -40,7 +44,13 @@ export const ApplicationList = observer(() => {
     {
       key: 'build',
       name: 'Build',
-      onRender: (item: Branch) => item.lastBuild?.status,
+      onRender: (item: Branch) => {
+        const lastBuild = item.lastBuild
+
+        if (lastBuild?.id) {
+          return <BuildStatusIndicator status={lastBuild.status} result={lastBuild.result} />
+        }
+      },
       minWidth: 50,
       maxWidth: 100,
       isResizable: true
@@ -96,6 +106,12 @@ export const ApplicationList = observer(() => {
             root: {
               display: 'flex'
             }
+          }}
+          onRenderRow={(props) => {
+            if (props) {
+              return <DetailsRow {...props} styles={{ fields: { alignItems: 'center' } }} />
+            }
+            return null
           }}
           groups={groups}
           columns={columns}

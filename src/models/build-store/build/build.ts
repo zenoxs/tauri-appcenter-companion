@@ -1,5 +1,6 @@
 import { Instance, SnapshotOut, types } from 'mobx-state-tree'
 import { v4 as uuid } from 'uuid'
+import { BUILD_RESULT, BUILD_STATUS } from '../../../services'
 
 /**
  * Model description here for TypeScript hints.
@@ -12,8 +13,8 @@ export const BuildModel = types.model('Build').props({
   startTime: types.Date,
   finishTime: types.Date,
   lastChangedDate: types.Date,
-  status: types.string,
-  result: types.string,
+  status: types.enumeration('BuildStatus', [...BUILD_STATUS]),
+  result: types.maybe(types.enumeration('BuildResult', [...BUILD_RESULT])),
   reason: types.string,
   sourceBranch: types.string,
   sourceVersion: types.string,

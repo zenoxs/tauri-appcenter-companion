@@ -1,3 +1,15 @@
+export const BUILD_STATUS = [
+  'completed',
+  'notStarted',
+  'inProgress',
+  'cancelling',
+  'unknown'
+] as const
+export type BuildStatus = typeof BUILD_STATUS[number]
+
+export const BUILD_RESULT = ['failed', 'canceled', 'succeeded', 'unknown']
+export type BuildResult = typeof BUILD_RESULT[number]
+
 export interface OwnerDto {
   id: string
   avatar_url: null | string
@@ -36,8 +48,8 @@ export interface BuildDto {
   startTime: string
   finishTime: string
   lastChangedDate: string
-  status: string
-  result: string
+  status: BuildStatus
+  result?: BuildResult
   reason: string
   sourceBranch: string
   sourceVersion: string

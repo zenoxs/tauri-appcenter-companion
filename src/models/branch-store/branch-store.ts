@@ -1,6 +1,7 @@
 import { Instance, SnapshotOut, types } from 'mobx-state-tree'
 import { BranchDto } from '../../services'
-import { withEnvironment } from '../extensions/extensions'
+import { Build } from '../build-store'
+import { withEnvironment, withRootStore } from '../extensions/extensions'
 import { BranchModel } from './branch'
 
 /**
@@ -17,6 +18,7 @@ export const BranchStoreModel = types
     }
   }))
   .extend(withEnvironment)
+  .extend(withRootStore)
   .actions((self) => ({
     putBranchDdto: (
       branchDto: BranchDto,
@@ -24,11 +26,17 @@ export const BranchStoreModel = types
       applicationName: string,
       ownerName: string
     ) => {
+      let lastBuild: Build | undefined
+      if (branchDto.lastBuild) {
+        lastBuild = self.rootStore.buildStore.putBuild(branchDto.lastBuild)
+      }
+
       return self.branches.put({
         id: `${ownerName}_${applicationName}_${branchDto.branch.name}`,
         name: branchDto.branch.name,
         configured: branchDto.configured,
-        _application: appId
+        _application: appId,
+        lastBuild: lastBuild?.id
       })
     }
   }))

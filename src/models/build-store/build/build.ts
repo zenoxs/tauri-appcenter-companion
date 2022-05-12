@@ -1,9 +1,11 @@
 import { Instance, SnapshotOut, types } from 'mobx-state-tree'
+import { v4 as uuid } from 'uuid'
 
 /**
  * Model description here for TypeScript hints.
  */
 export const BuildModel = types.model('Build').props({
+  id: types.optional(types.identifier, () => uuid()),
   buildId: types.number,
   buildNumber: types.string,
   queueTime: types.Date,

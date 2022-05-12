@@ -32,10 +32,10 @@ export interface CommitDto {
 export interface BuildDto {
   id: number
   buildNumber: string
-  queueTime: Date
-  startTime: Date
-  finishTime: Date
-  lastChangedDate: Date
+  queueTime: string
+  startTime: string
+  finishTime: string
+  lastChangedDate: string
   status: string
   result: string
   reason: string

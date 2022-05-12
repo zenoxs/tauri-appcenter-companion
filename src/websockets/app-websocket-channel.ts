@@ -57,15 +57,15 @@ export type WsAppEvent = WsAppBuildUpdatedEvent | WsAppLogConsoleLinesEvent
 export class AppWebSocketChannel {
   static async connect(appcenterApi: AppcenterApi, branch: Branch): Promise<AppWebSocketChannel> {
     const wsUrl = await appcenterApi.getWebsocket(
-      branch.application.owner!.displayName,
-      branch.application.name,
-      branch.application.token!.token
+      branch.application!.owner!.displayName,
+      branch.application!.name,
+      branch.application!.token!.token
     )
-    if (AppWebSocketChannel._openedWebSockets[branch.application.id]) {
-      return AppWebSocketChannel._openedWebSockets[branch.application.id]
+    if (AppWebSocketChannel._openedWebSockets[branch.application!.id]) {
+      return AppWebSocketChannel._openedWebSockets[branch.application!.id]
     }
     const channel = new AppWebSocketChannel(wsUrl, branch)
-    AppWebSocketChannel._openedWebSockets[branch.application.id] = channel
+    AppWebSocketChannel._openedWebSockets[branch.application!.id] = channel
     return channel
   }
 

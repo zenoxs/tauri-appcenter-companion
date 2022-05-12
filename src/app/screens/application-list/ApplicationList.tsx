@@ -24,7 +24,7 @@ export const ApplicationList = observer(() => {
     {
       key: 'name',
       name: 'Name',
-      onRender: (item: Branch) => item.application.displayName,
+      onRender: (item: Branch) => item.application?.displayName,
       minWidth: 100,
       maxWidth: 250,
       isResizable: true
@@ -36,13 +36,25 @@ export const ApplicationList = observer(() => {
       minWidth: 50,
       maxWidth: 100,
       isResizable: true
+    },
+    {
+      key: 'build',
+      name: 'Build',
+      onRender: (item: Branch) => item.lastBuild?.status,
+      minWidth: 50,
+      maxWidth: 100,
+      isResizable: true
     }
   ]
 
   let items: Array<Branch> = []
   const groups: Array<IGroup> = []
   for (const application of bundledApplications) {
-    const branches = application.branches as Array<Branch>
+    const branches = application.branches.map((b) => ({
+      ...b,
+      application: b?.application,
+      lastBuild: b?.lastBuild
+    })) as Array<Branch>
     groups.push({
       key: application.id,
       name: application.name,

@@ -20,7 +20,7 @@ export const BundledApplicationStoreModel = types
       const appsToFetch: Record<string, Application> = {}
       self.bundledApplications.forEach((bundledApplication) => {
         bundledApplication.branches.forEach((branch) => {
-          if (branch?.application.id && !appsToFetch[branch.application.id]) {
+          if (branch?.application?.id && !appsToFetch[branch.application.id]) {
             appsToFetch[branch.application.id] = branch.application
           }
         })

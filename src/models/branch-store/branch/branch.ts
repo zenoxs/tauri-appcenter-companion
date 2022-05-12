@@ -1,6 +1,7 @@
 import { IObjectWithKey } from '@fluentui/react'
 import { IAnyModelType, Instance, SnapshotOut, types } from 'mobx-state-tree'
 import { Application, ApplicationModel } from '../../application-store'
+import { BuildModel } from '../../build-store'
 
 /**
  * Model description here for TypeScript hints.
@@ -11,14 +12,15 @@ export const BranchModel = types
     id: types.identifier,
     name: types.string,
     configured: types.boolean,
-    _application: types.reference(types.late((): IAnyModelType => ApplicationModel))
+    lastBuild: types.safeReference(BuildModel),
+    _application: types.safeReference(types.late((): IAnyModelType => ApplicationModel))
   })
   .views((self) => ({
     get key() {
       return self.id
     },
     get application() {
-      return self._application as Application
+      return self._application as Application | undefined
     }
   }))
 

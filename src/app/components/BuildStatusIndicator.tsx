@@ -8,7 +8,7 @@ export interface BuildStatusIndicatorrProps {
   size?: number
 }
 
-export const BuildStatusIndicator = ({ result, status, size = 25 }: BuildStatusIndicatorrProps) => {
+export const BuildStatusIndicator = ({ result, status, size = 20 }: BuildStatusIndicatorrProps) => {
   const theme = useTheme()
   const style = { width: size, height: size, fontSize: size }
   let icon = 'UnknownSolid'

@@ -9,8 +9,11 @@ import {
   IColumn,
   IDetailsList,
   IGroup,
+  Image,
   ProgressIndicator,
-  SelectionMode
+  SelectionMode,
+  Stack,
+  Text
 } from '@fluentui/react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { BuildStatusIndicator } from '../../components'
@@ -39,7 +42,28 @@ export const ApplicationList = observer(() => {
     {
       key: 'name',
       name: 'Name',
-      onRender: (item: Branch) => item.application?.displayName,
+      onRender: (item: Branch) => {
+        const appName = (
+          <Text styles={{ root: { fontWeight: 500 } }} variant='medium'>
+            {item.application?.displayName}
+          </Text>
+        )
+        if (item.application?.iconUrl) {
+          return (
+            <Stack horizontal tokens={{ childrenGap: 10 }}>
+              <Image
+                width={25}
+                height={25}
+                styles={{ root: { borderRadius: 5 } }}
+                src={item.application.iconUrl}
+                alt={item.application.name}
+              />
+              {appName}
+            </Stack>
+          )
+        }
+        return appName
+      },
       minWidth: 100,
       maxWidth: 250,
       isResizable: true
@@ -79,11 +103,12 @@ export const ApplicationList = observer(() => {
     groups.push({
       key: application.id,
       name: application.name,
+      data: application,
       startIndex: items.length,
       count: branches.length,
       level: 0,
       isCollapsed: false
-    })
+    } as IGroup)
     items = items.concat(branches)
   }
 

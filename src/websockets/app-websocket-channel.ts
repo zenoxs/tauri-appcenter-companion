@@ -114,20 +114,13 @@ export class AppWebSocketChannel {
 
   readonly events = this._eventSubject.asObservable()
 
-  close() {
-    this._socket.disconnect()
+  async close() {
+    await this._socket.disconnect()
     this._eventSubject.complete()
     clearInterval(this._heartbeatInterval)
   }
 
   private _method(method: SocketMethod) {
-    this._socket
-      .send(method.toJson())
-      .then(() => {
-        console.log('sent')
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+    return this._socket.send(method.toJson())
   }
 }

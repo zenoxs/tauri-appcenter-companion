@@ -1,11 +1,12 @@
 import React, { createRef, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import { Branch, useStores } from '../../../models'
+import { Branch, BundledApplication, useStores } from '../../../models'
 import {
   CommandBar,
   ConstrainMode,
   DetailsList,
   DetailsRow,
+  GroupHeader,
   IColumn,
   IDetailsList,
   IGroup,
@@ -16,7 +17,7 @@ import {
   Text
 } from '@fluentui/react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { BuildStatusIndicator } from '../../components'
+import { BuildButton, BuildStatusIndicator } from '../../components'
 
 export const ApplicationList = observer(() => {
   const {
@@ -158,6 +159,32 @@ export const ApplicationList = observer(() => {
             return null
           }}
           groups={groups}
+          groupProps={{
+            onRenderHeader: (props) => (
+              <GroupHeader
+                {...props}
+                onRenderTitle={(props) => {
+                  const application: BundledApplication = props?.group?.data
+                  return (
+                    <Stack horizontal tokens={{ childrenGap: 10 }} verticalAlign={'center'} grow>
+                      <Text variant='medium'>{props?.group?.name}</Text>
+                      {application && (
+                        <BuildStatusIndicator
+                          status={application.status}
+                          result={application.result}
+                        />
+                      )}
+                      <Stack.Item grow>&nbsp;</Stack.Item>
+                      <BuildButton
+                        buildStatus={application.status}
+                        canBuild={application.canBuild}
+                      />
+                    </Stack>
+                  )
+                }}
+              />
+            )
+          }}
           columns={columns}
           ariaLabelForSelectAllCheckbox='Toggle selection for all items'
           ariaLabelForSelectionColumn='Toggle selection'

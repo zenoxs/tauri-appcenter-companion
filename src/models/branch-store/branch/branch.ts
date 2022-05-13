@@ -22,8 +22,14 @@ export const BranchModel = types
     get key() {
       return self.id
     },
-    get application() {
+    get application(): Application | undefined {
       return self._application as Application | undefined
+    }
+  }))
+  .views((self) => ({
+    get canBuild() {
+      // can't be typped because of circular dependencies
+      return self._application?.token?.access === 'fullAccess'
     }
   }))
   .actions((self) => ({

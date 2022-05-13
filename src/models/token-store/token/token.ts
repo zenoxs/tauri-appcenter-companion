@@ -1,6 +1,7 @@
 import { Instance, SnapshotOut, types } from 'mobx-state-tree'
 
-export const TOKEN_ACCESS = ['fullAccess', 'readOnly']
+export const TOKEN_ACCESS = ['fullAccess', 'readOnly'] as const
+export type TokenAccess = typeof TOKEN_ACCESS[number]
 
 /**
  * Model description here for TypeScript hints.
@@ -8,7 +9,7 @@ export const TOKEN_ACCESS = ['fullAccess', 'readOnly']
 export const TokenModel = types.model('Token').props({
   name: types.string,
   token: types.identifier,
-  access: types.enumeration('TokenAccess', TOKEN_ACCESS)
+  access: types.enumeration('TokenAccess', [...TOKEN_ACCESS])
 })
 
 /**

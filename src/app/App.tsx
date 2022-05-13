@@ -4,7 +4,14 @@ import { RootStore } from '../models/root-store/root-store'
 import { RootStoreProvider, setupRootStore } from '../models'
 import { DarkTheme, DefaultTheme } from '@uifabric/theme-samples'
 import { AppNavigator } from './navigation/AppNavigator'
-import { ThemeProvider } from '@fluentui/react'
+import { Theme, ThemeProvider } from '@fluentui/react'
+
+const darkTheme: Theme = {
+  ...DarkTheme
+}
+const lightTheme: Theme = {
+  ...DefaultTheme
+}
 
 export const App: React.FunctionComponent = () => {
   const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined)
@@ -33,7 +40,7 @@ export const App: React.FunctionComponent = () => {
 
   return (
     <RootStoreProvider value={rootStore}>
-      <ThemeProvider theme={isDarkMode ? DarkTheme : DefaultTheme} applyTo='body'>
+      <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme} applyTo='body'>
         <AppNavigator />
       </ThemeProvider>
     </RootStoreProvider>

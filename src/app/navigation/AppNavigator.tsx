@@ -6,6 +6,7 @@ import {
   Nav,
   Stack,
   Text,
+  Theme,
   ThemeContext
 } from '@fluentui/react'
 import { ApplicationList } from '../screens/application-list/ApplicationList'
@@ -14,13 +15,13 @@ import './AppNavigator.css'
 import { APITokenListModal } from '../screens/api-token/APITokenListModal'
 import { AddBundledAppDialog } from '../screens/application-list/AddBundledAppDialog'
 
-const navStyles: Partial<INavStyles> = {
+const navStyles = (theme: Theme): Partial<INavStyles> => ({
   root: {
     marginTop: 20,
     width: 180,
     boxSizing: 'border-box',
-    overflowY: 'auto'
-    // background: 'rgba(0,0,0,0.6)'
+    overflowY: 'auto',
+    background: 'transparent'
   },
   navItem: {
     backgroundColor: 'transparent'
@@ -34,7 +35,7 @@ const navStyles: Partial<INavStyles> = {
       backgroundColor: 'transparent'
     }
   }
-}
+})
 
 const navLinkGroups: INavLinkGroup[] = [
   {
@@ -74,7 +75,7 @@ export const AppNavigator = () => {
               event?.preventDefault()
               return navigate(link?.url ?? '/')
             }}
-            styles={navStyles}
+            styles={navStyles(theme)}
             groups={navLinkGroups}
           />
           <Stack.Item verticalFill>
@@ -83,6 +84,7 @@ export const AppNavigator = () => {
           <CommandButton
             text='API Tokens'
             iconProps={{ iconName: 'Signin' }}
+            styles={{ root: { backgroundColor: 'transparent' } }}
             onClick={() => navigate('/api-tokens', { state: { backgroundLocation: location } })}
           />
         </Stack>
@@ -92,7 +94,7 @@ export const AppNavigator = () => {
           verticalFill
           styles={{
             root: {
-              backgroundColor: theme?.semanticColors.bodyBackground,
+              backgroundColor: theme.semanticColors.bodyBackground,
               overflowX: 'hidden',
               borderRadius: '10px 0px 0px 0px'
             }

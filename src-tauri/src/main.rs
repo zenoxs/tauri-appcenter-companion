@@ -7,12 +7,14 @@ mod window_ext;
 
 use tauri::Manager;
 use tauri_plugin_store::PluginBuilder;
+use tauri_plugin_websocket::TauriWebsocket;
 use window_ext::WindowExt;
 use window_vibrancy::{apply_vibrancy, NSVisualEffectMaterial};
 
 fn main() {
     tauri::Builder::default()
         .plugin(PluginBuilder::default().build())
+        .plugin(TauriWebsocket::default())
         .setup(|app| {
             let window = app.get_window("main").unwrap();
 

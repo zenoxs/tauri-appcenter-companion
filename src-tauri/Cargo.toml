@@ -23,7 +23,11 @@ tauri = { version = "1.0.0-rc.7", features = ["http-all", "macos-private-api", "
 
 [dependencies.tauri-plugin-store]
 git = "https://github.com/tauri-apps/tauri-plugin-store"
-commit = "4a5a8fb54e62bc0d0e07007b83101c3fe5cf24ba"
+rev = "4a5a8fb54e62bc0d0e07007b83101c3fe5cf24ba"
+
+[dependencies.tauri-plugin-websocket]
+git = "https://github.com/tauri-apps/tauri-plugin-websocket"
+rev = "53c9a3ffc37cd178928d4f6c3443f4c1beb63962"
 
 [features]
 # by default Tauri runs in production mode

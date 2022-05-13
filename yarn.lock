@@ -530,6 +530,13 @@
     estree-walker "^2.0.1"
     picomatch "^2.2.2"
 
+"@tauri-apps/api@1.0.0-rc.1":
+  version "1.0.0-rc.1"
+  resolved "https://registry.yarnpkg.com/@tauri-apps/api/-/api-1.0.0-rc.1.tgz#ce26a0fe30d8980a4682d50015eec28ed4a23c1e"
+  integrity sha512-VBUOmfT8ea02JB/Qr+FHeaLnug5BRA7ro2pX47q0GZCbZsU9b+iPnOXl0ShJwT0melR7B6iamyhDwkHStMVfQA==
+  dependencies:
+    type-fest "2.11.2"
+
 "@tauri-apps/api@1.0.0-rc.4", "@tauri-apps/api@^1.0.0-rc.4":
   version "1.0.0-rc.4"
   resolved "https://registry.yarnpkg.com/@tauri-apps/api/-/api-1.0.0-rc.4.tgz#454ef7b15237f3d5752bbfc09c8997a00b1e8a9b"
@@ -2482,6 +2489,13 @@ supports-preserve-symlinks-flag@^1.0.0:
     "@tauri-apps/api" "1.0.0-rc.4"
     tslib "2.4.0"
 
+"tauri-plugin-websocket@github:tauri-apps/tauri-apps/tauri-plugin-websocket#53c9a3ffc37cd178928d4f6c3443f4c1beb63962":
+  version "0.1.0"
+  resolved "https://codeload.github.com/tauri-apps/tauri-plugin-websocket/tar.gz/53c9a3ffc37cd178928d4f6c3443f4c1beb63962"
+  dependencies:
+    "@tauri-apps/api" "1.0.0-rc.1"
+    tslib "2.3.1"
+
 text-table@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
@@ -2509,6 +2523,11 @@ tsconfig-paths@^3.14.1:
     minimist "^1.2.6"
     strip-bom "^3.0.0"
 
+tslib@2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.3.1.tgz#e8a335add5ceae51aa261d32a490158ef042ef01"
+  integrity sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==
+
 tslib@2.4.0, tslib@^2.1.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.4.0.tgz#7cecaa7f073ce680a05847aa77be941098f36dc3"
@@ -2532,6 +2551,11 @@ type-check@^0.4.0, type-check@~0.4.0:
   integrity sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==
   dependencies:
     prelude-ls "^1.2.1"
+
+type-fest@2.11.2:
+  version "2.11.2"
+  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-2.11.2.tgz#5534a919858bc517492cd3a53a673835a76d2e71"
+  integrity sha512-reW2Y2Mpn0QNA/5fvtm5doROLwDPu2zOm5RtY7xQQS05Q7xgC8MOZ3yPNaP9m/s/sNjjFQtHo7VCNqYW2iI+Ig==
 
 type-fest@2.12.2:
   version "2.12.2"

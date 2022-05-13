@@ -8,7 +8,8 @@
     "preview": "vite preview",
     "lint": "eslint src",
     "tauri": "tauri",
-    "tauri:dev": "tauri dev"
+    "tauri:dev": "tauri dev",
+    "postinstall": "cd node_modules/tauri-plugin-websocket && yarn && yarn build"
   },
   "dependencies": {
     "@fluentui/react": "^8.67.2",
@@ -24,6 +25,7 @@
     "react-router-dom": "6",
     "rxjs": "^7.5.5",
     "tauri-plugin-store-api": "github:tauri-apps/tauri-plugin-store#4a5a8fb54e62bc0d0e07007b83101c3fe5cf24ba",
+    "tauri-plugin-websocket": "github:tauri-apps/tauri-apps/tauri-plugin-websocket#53c9a3ffc37cd178928d4f6c3443f4c1beb63962",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

@@ -70,7 +70,12 @@ export const setUpBundledApplicationWs = (rootStore: RootStore, appcenterApi: Ap
             (b) => b.id === snapBundledApp.id
           )
           if (bundledApp) {
-            subBranches = subBranches.concat(bundledApp.branches as Array<Branch>)
+            subBranches = subBranches.concat(
+              bundledApp.branches.filter(
+                (b) =>
+                  subBranches.some((sb) => sb.id === b?.id) && b?.application?.owner !== undefined
+              ) as Array<Branch>
+            )
           }
         }
         return Promise.all(

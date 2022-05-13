@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   DefaultButton,
   DetailsHeader,
-  DetailsList,
   Dialog,
   DialogFooter,
   DialogType,
@@ -13,19 +12,29 @@ import {
   Stack,
   TextField,
   Selection,
-  Dropdown
+  DetailsList,
+  Spinner,
+  SpinnerSize
 } from '@fluentui/react'
 import { useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { Branch, BundledApplicationSnapshotIn, useStores } from '../../../models'
 import { useConst } from '@fluentui/react-hooks'
 
-const columns = [
+const columns: Array<IColumn> = [
   {
     key: 'name',
     name: 'Name',
     fieldName: 'name',
+    minWidth: 100,
+    maxWidth: 200,
+    isResizable: true
+  },
+  {
+    key: 'token',
+    name: 'token',
+    onRender: (item: Branch) => item.application?.token?.name,
     minWidth: 100,
     maxWidth: 200,
     isResizable: true
@@ -34,7 +43,7 @@ const columns = [
 
 export const AddBundledAppDialog = observer(() => {
   const {
-    applicationStore: { fetchApplications, applicationsByToken },
+    applicationStore: { fetchApplications, applicationList },
     bundledApplicationStore: { addBundledApplication },
     tokenStore: { tokens }
   } = useStores()
@@ -45,19 +54,17 @@ export const AddBundledAppDialog = observer(() => {
     register,
     unregister,
     handleSubmit,
-    control,
     setValue,
-    watch,
     formState: { errors }
   } = useForm<BundledApplicationSnapshotIn>()
+
+  const [isLoading, setIsLoading] = useState(true)
 
   // TODO: a rules to check that their is at least one branches
   React.useEffect(() => {
     register('branches')
     return () => unregister('branches')
   }, [register])
-
-  const selectedToken = watch('token', undefined) as string | undefined
 
   const selection = useConst(
     () =>
@@ -72,19 +79,16 @@ export const AddBundledAppDialog = observer(() => {
   )
 
   useEffect(() => {
-    if (selectedToken) {
-      fetchApplications(selectedToken, { withBranches: true })
-    }
-  }, [selectedToken])
+    setIsLoading(true)
+    Promise.all(
+      tokens.map((token) => fetchApplications(token.token, { withBranches: true }))
+    ).finally(() => setIsLoading(false))
+  }, [])
 
   const [items, groups] = (() => {
     let items: Array<Branch> = []
     const groups: Array<IGroup> = []
-    if (!selectedToken) {
-      return [items, groups]
-    }
-    const applications = applicationsByToken(selectedToken)
-    for (const application of applications) {
+    for (const application of applicationList) {
       const branches = application.configuredBranches as Array<Branch>
       groups.push({
         key: application.id,
@@ -124,30 +128,18 @@ export const AddBundledAppDialog = observer(() => {
       }}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Stack>
+        <Stack tokens={{ childrenGap: 10 }} styles={{ root: { height: '100%' } }}>
           <TextField
             required
             label='Name'
             {...register('name', { required: { value: true, message: 'Name is required' } })}
             errorMessage={errors.name?.message}
           />
-          <Controller
-            name='token'
-            control={control}
-            rules={{ required: { value: true, message: 'Token is required' } }}
-            render={({ field }) => (
-              <Dropdown
-                required
-                options={tokens.map((token) => ({ key: token.token, text: token.name }))}
-                label='API Token'
-                selectedKey={field.value}
-                onChange={(event, item) => field.onChange(item?.key)}
-                errorMessage={errors.token?.message}
-              />
-            )}
-          />
-          {selectedToken && (
+          {isLoading ? (
+            <Spinner size={SpinnerSize.large} label='Fetching applications...' />
+          ) : (
             <DetailsList
+              styles={{ root: { flex: 1 } }}
               selection={selection}
               items={items}
               groups={groups}

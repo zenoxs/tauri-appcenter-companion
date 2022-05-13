@@ -1,7 +1,6 @@
 import { Instance, SnapshotIn, SnapshotOut, types } from 'mobx-state-tree'
 import { v4 as uuid } from 'uuid'
 import { BranchModel } from '../../branch-store'
-import { TokenModel } from '../../token-store'
 
 /**
  * Model description here for TypeScript hints.
@@ -9,8 +8,7 @@ import { TokenModel } from '../../token-store'
 export const BundledApplicationModel = types.model('BundledApplication').props({
   id: types.optional(types.identifier, () => uuid()),
   name: types.string,
-  branches: types.array(types.safeReference(BranchModel)),
-  token: types.safeReference(TokenModel)
+  branches: types.array(types.safeReference(BranchModel))
 })
 
 /**

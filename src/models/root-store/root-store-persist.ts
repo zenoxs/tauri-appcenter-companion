@@ -9,7 +9,7 @@ export interface IOptions {
 export interface IArgs {
   (name: string, store: IStateTreeNode, options?: IOptions): Promise<void>
 }
-type StrToAnyMap = { [key: string]: any }
+type StrToAnyMap = { [key: string]: unknown }
 
 export const persist: IArgs = (name, store, options) => {
   const { storage, whitelist, blacklist } = options ?? {}
@@ -69,7 +69,7 @@ function arrToDict(arr?: Array<string>): StrToBoolMap {
   }, {})
 }
 
-function isString(value: any): value is string {
+function isString(value: unknown): value is string {
   return typeof value === 'string'
 }
 

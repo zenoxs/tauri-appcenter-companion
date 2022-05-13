@@ -100,13 +100,13 @@ export const AddBundledAppDialog = observer(() => {
     return [items, groups]
   })()
 
+  const onDismiss = () => {
+    navigate(-1)
+  }
+
   const onSubmit = (data: BundledApplicationSnapshotIn) => {
     addBundledApplication(data)
     onDismiss()
-  }
-
-  const onDismiss = () => {
-    navigate(-1)
   }
 
   return (

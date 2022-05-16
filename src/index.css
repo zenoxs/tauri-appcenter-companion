@@ -4,12 +4,12 @@ body {
     'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: transparent !important;
+  background-color: rgba(255, 255, 255, 0.4) !important;
 }
 
 @media (prefers-color-scheme: dark) {
   body {
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.6) !important;
   }
 }
 

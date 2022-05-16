@@ -7,6 +7,10 @@ on:
 jobs:
   create-release:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+      contents: write
     outputs:
       RELEASE_UPLOAD_ID: ${{ steps.create_release.outputs.id }}
 

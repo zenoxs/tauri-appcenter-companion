@@ -20,12 +20,12 @@ jobs:
         run: echo "PACKAGE_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
       - name: create release
         id: create_release
-        uses: actions/create-release@v1.1.0
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: app-v${{ env.PACKAGE_VERSION }}
-          release_name: 'Desktop app v${{ env.PACKAGE_VERSION }}'
+          release_name: 'AC Companion v${{ env.PACKAGE_VERSION }}'
           body: 'See the assets to download this version and install.'
           draft: true
           prerelease: false

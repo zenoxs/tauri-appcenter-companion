@@ -96,6 +96,7 @@ export const ApplicationList = observer(() => {
   let items: Array<Branch> = []
   const groups: Array<IGroup> = []
   for (const application of bundledApplications) {
+    // force reload on application deps change
     const branches = application.branches.map((b) => ({
       ...b,
       application: b?.application,

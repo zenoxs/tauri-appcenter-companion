@@ -9,8 +9,10 @@ mod window_ext;
 use tauri::Manager;
 use tauri_plugin_store::PluginBuilder;
 use tauri_plugin_websocket::TauriWebsocket;
+
  #[cfg(target_os = "macos")]
 use window_ext::WindowExt;
+ #[cfg(target_os = "macos")]
 use window_vibrancy::{apply_vibrancy, NSVisualEffectMaterial};
 
 fn main() {

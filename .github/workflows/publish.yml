@@ -34,6 +34,10 @@ jobs:
           draft: true
           prerelease: false
   publish-tauri:
+    permissions:
+      issues: write
+      pull-requests: write
+      contents: write
     needs: create-release
     strategy:
       fail-fast: false

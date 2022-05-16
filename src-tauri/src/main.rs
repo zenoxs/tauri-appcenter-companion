@@ -3,6 +3,7 @@
     windows_subsystem = "windows"
 )]
 
+#[cfg(target_os = "macos")]
 mod window_ext;
 
 use tauri::Manager;

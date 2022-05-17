@@ -1,4 +1,4 @@
-import React, { createRef, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { Branch, BundledApplication, useStores } from '../../../models'
 import {
@@ -8,7 +8,6 @@ import {
   DetailsRow,
   GroupHeader,
   IColumn,
-  IDetailsList,
   IGroup,
   Image,
   ProgressIndicator,
@@ -21,12 +20,13 @@ import { BuildButton, BuildStatusIndicator } from '../../components'
 
 export const ApplicationList = observer(() => {
   const {
-    bundledApplicationStore: { bundledApplications, refresh }
+    bundledApplicationStore: { bundledApplications, refresh },
+    branchStore: { branches }
   } = useStores()
-  const detailsList = createRef<IDetailsList>()
   const navigate = useNavigate()
   const location = useLocation()
   const [isLoading, setIsLoading] = useState(false)
+  const [renderTable, setRenderTable] = useState(false)
 
   const onRefresh = () => {
     setIsLoading(true)
@@ -37,6 +37,8 @@ export const ApplicationList = observer(() => {
 
   useEffect(() => {
     onRefresh()
+    // HACK to get the correct table width
+    setRenderTable(true)
   }, [])
 
   const columns: Array<IColumn> = [
@@ -66,16 +68,14 @@ export const ApplicationList = observer(() => {
         return appName
       },
       minWidth: 100,
-      maxWidth: 250,
-      isResizable: true
+      maxWidth: 250
     },
     {
       key: 'branch',
       name: 'Branch',
       onRender: (item: Branch) => item.name,
       minWidth: 50,
-      maxWidth: 100,
-      isResizable: true
+      maxWidth: 100
     },
     {
       key: 'build',
@@ -87,9 +87,29 @@ export const ApplicationList = observer(() => {
           return <BuildStatusIndicator status={lastBuild.status} result={lastBuild.result} />
         }
       },
-      minWidth: 50,
-      maxWidth: 100,
-      isResizable: true
+      minWidth: 50
+    },
+    {
+      key: 'actions',
+      name: 'Actions',
+      onRender: (item: Branch) => {
+        const lastBuild = item.lastBuild
+
+        if (lastBuild?.id) {
+          const branch = branches.get(item.id)!
+          return (
+            <Stack horizontal horizontalAlign='end' grow>
+              <BuildButton
+                canBuild={true}
+                onBuild={() => branch.startBuild()}
+                onCancelBuild={() => branch.cancelBuild()}
+                buildStatus={lastBuild.status}
+              />
+            </Stack>
+          )
+        }
+      },
+      minWidth: 50
     }
   ]
 
@@ -143,55 +163,65 @@ export const ApplicationList = observer(() => {
           />
         )}
         {!isLoading && <div style={{ height: 2 }} />}
-        <DetailsList
-          constrainMode={ConstrainMode.horizontalConstrained}
-          selectionMode={SelectionMode.none}
-          componentRef={detailsList}
-          items={items}
-          styles={{
-            root: {
-              display: 'flex'
-            }
-          }}
-          onRenderRow={(props) => {
-            if (props) {
-              return <DetailsRow {...props} styles={{ fields: { alignItems: 'center' } }} />
-            }
-            return null
-          }}
-          groups={groups}
-          groupProps={{
-            onRenderHeader: (props) => (
-              <GroupHeader
-                {...props}
-                onRenderTitle={(props) => {
-                  const application: BundledApplication = props?.group?.data
-                  return (
-                    <Stack horizontal tokens={{ childrenGap: 10 }} verticalAlign={'center'} grow>
-                      <Text variant='medium'>{props?.group?.name}</Text>
-                      {application && (
-                        <BuildStatusIndicator
-                          status={application.status}
-                          result={application.result}
-                        />
-                      )}
-                      <Stack.Item grow>&nbsp;</Stack.Item>
-                      <BuildButton
-                        buildStatus={application.status}
-                        canBuild={application.canBuild}
-                      />
-                    </Stack>
-                  )
-                }}
-              />
-            )
-          }}
-          columns={columns}
-          ariaLabelForSelectAllCheckbox='Toggle selection for all items'
-          ariaLabelForSelectionColumn='Toggle selection'
-          checkButtonAriaLabel='select row'
-          checkButtonGroupAriaLabel='select section'
-        />
+        {renderTable && (
+          <DetailsList
+            constrainMode={ConstrainMode.horizontalConstrained}
+            selectionMode={SelectionMode.none}
+            items={items}
+            styles={{
+              root: {
+                display: 'flex'
+              }
+            }}
+            onRenderRow={(props) => {
+              if (props) {
+                return <DetailsRow {...props} styles={{ fields: { alignItems: 'center' } }} />
+              }
+              return null
+            }}
+            groups={groups}
+            groupProps={{
+              onRenderHeader: (props) => (
+                <GroupHeader
+                  {...props}
+                  onRenderTitle={(props) => {
+                    const application: BundledApplication = props?.group?.data
+                    return (
+                      <Stack
+                        horizontal
+                        horizontalAlign='space-between'
+                        tokens={{ childrenGap: 10 }}
+                        verticalAlign={'center'}
+                        grow
+                      >
+                        <Stack horizontal tokens={{ childrenGap: 10 }}>
+                          <Text variant='medium'>{props?.group?.name}</Text>
+                          {application && (
+                            <BuildStatusIndicator
+                              status={application.status}
+                              result={application.result}
+                            />
+                          )}
+                        </Stack>
+                        <div style={{ paddingRight: 8 }}>
+                          <BuildButton
+                            buildStatus={application.status}
+                            canBuild={application.canBuild}
+                          />
+                        </div>
+                      </Stack>
+                    )
+                  }}
+                />
+              )
+            }}
+            columns={columns}
+            ariaLabelForSelectAllCheckbox='Toggle selection for all items'
+            ariaLabelForSelectionColumn='Toggle selection'
+            checkButtonAriaLabel='select row'
+            checkButtonGroupAriaLabel='select section'
+          />
+        )}
       </div>
     </>
   )

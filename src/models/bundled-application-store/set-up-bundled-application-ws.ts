@@ -12,7 +12,7 @@ export const setUpBundledApplicationWs = (rootStore: RootStore, appcenterApi: Ap
   const storeSnapshot = new Subject<BundledApplicationStoreSnapshot>()
 
   const disconectAllWebSockets = async () => {
-    console.log('disconnect all websockets')
+    console.info('disconnect all websockets')
     for (const websocket of websockets) {
       await websocket.close()
     }
@@ -22,38 +22,7 @@ export const setUpBundledApplicationWs = (rootStore: RootStore, appcenterApi: Ap
   }
 
   onSnapshot(rootStore.bundledApplicationStore, (snapshot) => {
-    console.info('Got new snapshot:', snapshot)
     storeSnapshot.next(snapshot)
-    disconectAllWebSockets()
-    let subBranches: Array<Branch> = []
-    // filter the branches to prevent duplicates
-    for (const snapBundledApp of snapshot.bundledApplications) {
-      const bundledApp = rootStore.bundledApplicationStore.bundledApplications.find(
-        (b) => b.id === snapBundledApp.id
-      )
-      if (bundledApp) {
-        subBranches = subBranches.concat(
-          bundledApp.branches.filter((b) =>
-            subBranches.some((sb) => sb.id === b?.id)
-          ) as Array<Branch>
-        )
-      }
-    }
-    Promise.all(
-      subBranches.map(async (branch) => {
-        const ws = await AppWebSocketChannel.connect(appcenterApi, branch)
-        const sub = ws.events.subscribe((event) => {
-          console.log(event)
-          if (event.type === 'buildUpdated') {
-            rootStore.branchStore.branches.get(branch.id)?.setBuild(event.data)
-          }
-        })
-        subscriptions.push(sub)
-        return ws
-      })
-    ).then((subscribedWebsockets) => {
-      websockets = subscribedWebsockets
-    })
   })
 
   storeSnapshot
@@ -73,11 +42,12 @@ export const setUpBundledApplicationWs = (rootStore: RootStore, appcenterApi: Ap
             subBranches = subBranches.concat(
               bundledApp.branches.filter(
                 (b) =>
-                  subBranches.some((sb) => sb.id === b?.id) && b?.application?.owner !== undefined
+                  !subBranches.some((sb) => sb.id === b?.id) && b?.application?.owner !== undefined
               ) as Array<Branch>
             )
           }
         }
+        console.info({ subBranches: subBranches.map((s) => s.name) })
         return Promise.all(
           subBranches.map(async (branch) => {
             const ws = await AppWebSocketChannel.connect(appcenterApi, branch)

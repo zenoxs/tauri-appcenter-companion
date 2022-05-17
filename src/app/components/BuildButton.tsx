@@ -18,6 +18,7 @@ export const BuildButton = ({
   return (
     <IconButton
       disabled={!canBuild}
+      onClick={onBuild}
       iconProps={{ iconName: 'Play' }}
       styles={{ root: { alignSelf: 'end' } }}
     />

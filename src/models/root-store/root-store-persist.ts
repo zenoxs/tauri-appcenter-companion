@@ -49,7 +49,6 @@ export const persist: IArgs = (name, store, options) => {
       return
     }
     try {
-      console.log(snapshot)
       applySnapshot(store, snapshot)
     } catch (e) {
       console.log(e)

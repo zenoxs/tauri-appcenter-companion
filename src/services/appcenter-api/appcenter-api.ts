@@ -1,3 +1,4 @@
+import { Body } from '@tauri-apps/api/http'
 import { HttpClient } from '../http-client/http-client'
 import { ApplicationDto, BranchDto } from './appcenter-api.type'
 
@@ -54,5 +55,60 @@ export class AppcenterApi {
         }
       })
       .then((res) => res.data.url)
+  }
+
+  async buildBranch({
+    ownerName,
+    applicationName,
+    branchName,
+    token,
+    commit
+  }: {
+    ownerName: string
+    applicationName: string
+    branchName: string
+    commit: string
+    token: string
+  }) {
+    await this._http.post(
+      `apps/${ownerName}/${applicationName}/branches/${branchName}/builds`,
+      Body.json({
+        sourceVersion: commit
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Token': token
+        }
+      }
+    )
+  }
+
+  async cancelBranchBuild({
+    ownerName,
+    applicationName,
+    branchName,
+    token,
+    buildId
+  }: {
+    ownerName: string
+    applicationName: string
+    branchName: string
+    buildId: string
+    token: string
+  }) {
+    const res = await this._http.patch(
+      `apps/${ownerName}/${applicationName}/branches/${branchName}/builds/${buildId}`,
+      Body.json({
+        status: 'cancelling'
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Token': token
+        }
+      }
+    )
+    console.log(res)
   }
 }

@@ -62,6 +62,7 @@ export class AppWebSocketChannel {
       branch.application!.name,
       branch.application!.token!.token
     )
+    console.log(wsUrl)
     if (AppWebSocketChannel._openedWebSockets[branch.application!.id]) {
       return AppWebSocketChannel._openedWebSockets[branch.application!.id]
     }

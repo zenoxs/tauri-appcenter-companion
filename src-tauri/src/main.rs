@@ -16,6 +16,11 @@ use window_ext::WindowExt;
 #[cfg(target_os = "macos")]
 use window_vibrancy::{apply_vibrancy, NSVisualEffectMaterial};
 
+#[tauri::command]
+async fn frontend_ready(window: tauri::Window) {
+    window.get_window("main").unwrap().show().unwrap();
+}
+
 fn main() {
     let ctx = tauri::generate_context!();
     let menu = if cfg!(not(target_os = "windows")) {
@@ -74,6 +79,7 @@ fn main() {
 
             Ok(())
         })
+        .invoke_handler(tauri::generate_handler![frontend_ready])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

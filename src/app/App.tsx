@@ -5,6 +5,7 @@ import { RootStoreProvider, setupRootStore } from '../models'
 import { DarkTheme, DefaultTheme } from '@uifabric/theme-samples'
 import { AppNavigator } from './navigation/AppNavigator'
 import { Theme, ThemeProvider } from '@fluentui/react'
+import { invoke } from '@tauri-apps/api/tauri'
 
 const darkTheme: Theme = {
   ...DarkTheme
@@ -35,6 +36,12 @@ export const App: React.FunctionComponent = () => {
       window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', () => {})
     }
   }, [])
+
+  useEffect(() => {
+    if (rootStore) {
+      invoke('frontend_ready')
+    }
+  }, [rootStore])
 
   if (!rootStore) return null
 

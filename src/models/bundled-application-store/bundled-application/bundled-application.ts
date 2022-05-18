@@ -37,8 +37,8 @@ export const BundledApplicationModel = types
         return 'cancelled'
       }
     },
-    get canBuild() {
-      return self.branches.every((b) => b?.canBuild)
+    get isBuildable() {
+      return self.branches.every((b) => b?.isBuildable)
     }
   }))
 

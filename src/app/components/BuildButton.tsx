@@ -6,14 +6,14 @@ export interface BuildButtonProps {
   onBuild?: () => void
   onCancelBuild?: () => void
   buildStatus?: BuildStatus
-  canBuild: boolean
+  isBuildable: boolean
 }
 
 export const BuildButton = ({
   onBuild,
   onCancelBuild,
   buildStatus,
-  canBuild
+  isBuildable: canBuild
 }: BuildButtonProps) => {
   return (
     <IconButton

@@ -100,7 +100,7 @@ export const ApplicationList = observer(() => {
           return (
             <Stack horizontal horizontalAlign='end' grow>
               <BuildButton
-                canBuild={true}
+                isBuildable={branch.isBuildable}
                 onBuild={() => branch.startBuild()}
                 onCancelBuild={() => branch.cancelBuild()}
                 buildStatus={lastBuild.status}
@@ -206,7 +206,7 @@ export const ApplicationList = observer(() => {
                         <div style={{ paddingRight: 8 }}>
                           <BuildButton
                             buildStatus={application.status}
-                            canBuild={application.canBuild}
+                            isBuildable={application.isBuildable}
                           />
                         </div>
                       </Stack>

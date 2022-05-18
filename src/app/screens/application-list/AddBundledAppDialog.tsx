@@ -89,7 +89,7 @@ export const AddBundledAppDialog = observer(() => {
     let items: Array<Branch> = []
     const groups: Array<IGroup> = []
     for (const application of applicationList) {
-      const branches = application.configuredBranches as Array<Branch>
+      const branches = application.configuredBranches
       groups.push({
         key: application.id,
         name: application.displayName,

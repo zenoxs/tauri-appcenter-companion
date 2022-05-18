@@ -36,7 +36,7 @@ export const BranchStoreModel = types
         name: branchDto.branch.name,
         configured: branchDto.configured,
         lastCommit: branchDto.branch.commit.sha,
-        _application: appId,
+        application: appId,
         lastBuild: lastBuild?.id
       })
     }

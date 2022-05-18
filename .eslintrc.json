@@ -17,9 +17,10 @@
       "jsx": true
     },
     "ecmaVersion": "latest",
-    "sourceType": "module"
+    "sourceType": "module",
+    "project": "./tsconfig.json"
   },
-  "plugins": ["react", "@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "react"],
   "settings": {
     "react": {
       "pragma": "React",
@@ -42,6 +43,9 @@
     "space-before-function-paren": 0,
     "no-use-before-define": 0,
     "@typescript-eslint/no-explicit-any": 1,
-    "@typescript-eslint/no-var-requires": 1
+    "@typescript-eslint/no-var-requires": 1,
+    "no-unused-expressions": "error",
+    "@typescript-eslint/no-unused-expressions": ["error", { "enforceForJSX": true }],
+    "@typescript-eslint/no-non-null-asserted-optional-chain": "error"
   }
 }

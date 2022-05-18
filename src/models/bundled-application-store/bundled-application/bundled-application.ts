@@ -41,6 +41,14 @@ export const BundledApplicationModel = types
       return self.branches.every((b) => b?.isBuildable)
     }
   }))
+  .actions((self) => ({
+    startBuild() {
+      self.branches.forEach((b) => b?.startBuild())
+    },
+    cancelBuild() {
+      self.branches.forEach((b) => b?.cancelBuild())
+    }
+  }))
 
 /**
  * Un-comment the following to omit model attributes from your snapshots (and from async storage).

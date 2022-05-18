@@ -45,11 +45,13 @@ export const BranchModel = types
       })
     }),
     cancelBuild: flow(function* () {
-      self.environment.appcenterApi.buildBranch({
+      if (!self.lastBuild) {
+        throw new Error('No build to cancel')
+      }
+      self.environment.appcenterApi.cancelBranchBuild({
         ownerName: self.application.owner.displayName,
         applicationName: self.application.name,
-        branchName: self.name,
-        commit: self.lastCommit,
+        buildId: self.lastBuild?.buildId,
         token: self.application.token.token
       })
     })

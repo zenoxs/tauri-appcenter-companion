@@ -87,18 +87,17 @@ export class AppcenterApi {
   async cancelBranchBuild({
     ownerName,
     applicationName,
-    branchName,
     token,
     buildId
   }: {
     ownerName: string
     applicationName: string
-    branchName: string
-    buildId: string
+    buildId: number
     token: string
   }) {
+    console.log('cancelBuild')
     const res = await this._http.patch(
-      `apps/${ownerName}/${applicationName}/branches/${branchName}/builds/${buildId}`,
+      `apps/${ownerName}/${applicationName}/builds/${buildId}`,
       Body.json({
         status: 'cancelling'
       }),

@@ -1,5 +1,5 @@
 import React from 'react'
-import { IconButton } from '@fluentui/react'
+import { IconButton, useTheme } from '@fluentui/react'
 import { BuildStatus } from '../../services'
 
 export interface BuildButtonProps {
@@ -15,6 +15,25 @@ export const BuildButton = ({
   buildStatus,
   isBuildable: canBuild
 }: BuildButtonProps) => {
+  const theme = useTheme()
+  if (buildStatus === 'inProgress' || buildStatus === 'notStarted') {
+    return (
+      <IconButton
+        disabled={!canBuild}
+        onClick={onCancelBuild}
+        iconProps={{ iconName: 'CircleStop' }}
+        styles={{
+          root: {
+            alignSelf: 'end',
+            color: theme.semanticColors.errorText
+          },
+          rootHovered: {
+            color: theme.semanticColors.errorText
+          }
+        }}
+      />
+    )
+  }
   return (
     <IconButton
       disabled={!canBuild}

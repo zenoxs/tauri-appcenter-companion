@@ -7,18 +7,61 @@
 mod window_ext;
 
 use tauri::Manager;
+use tauri::{CustomMenuItem, Menu, MenuItem, Submenu};
 use tauri_plugin_store::PluginBuilder;
 use tauri_plugin_websocket::TauriWebsocket;
 
- #[cfg(target_os = "macos")]
+#[cfg(target_os = "macos")]
 use window_ext::WindowExt;
- #[cfg(target_os = "macos")]
+#[cfg(target_os = "macos")]
 use window_vibrancy::{apply_vibrancy, NSVisualEffectMaterial};
 
 fn main() {
+    let ctx = tauri::generate_context!();
+    let menu = if cfg!(not(target_os = "windows")) {
+        Menu::new()
+            .add_submenu(Submenu::new(
+                &ctx.package_info().name,
+                Menu::new()
+                    .add_native_item(MenuItem::Hide)
+                    .add_native_item(MenuItem::HideOthers)
+                    .add_native_item(MenuItem::ShowAll)
+                    .add_native_item(MenuItem::Separator)
+                    .add_native_item(MenuItem::Quit),
+            ))
+            .add_submenu(Submenu::new(
+                "Edit",
+                Menu::new()
+                    .add_native_item(MenuItem::Undo)
+                    .add_native_item(MenuItem::Redo)
+                    .add_native_item(MenuItem::Separator)
+                    .add_native_item(MenuItem::Cut)
+                    .add_native_item(MenuItem::Copy)
+                    .add_native_item(MenuItem::Paste)
+                    .add_native_item(MenuItem::SelectAll),
+            ))
+            .add_submenu(Submenu::new(
+                "View",
+                Menu::new().add_native_item(MenuItem::EnterFullScreen),
+            ))
+            .add_submenu(Submenu::new(
+                "Window",
+                Menu::new()
+                    .add_native_item(MenuItem::Minimize)
+                    .add_native_item(MenuItem::Zoom),
+            ))
+            .add_submenu(Submenu::new(
+                "Help",
+                Menu::new().add_item(CustomMenuItem::new("Learn More", "Learn More")),
+            ))
+    } else {
+        Menu::new()
+    };
+
     tauri::Builder::default()
         .plugin(PluginBuilder::default().build())
         .plugin(TauriWebsocket::default())
+        .menu(menu)
         .setup(|app| {
             let window = app.get_window("main").unwrap();
 
@@ -33,9 +76,4 @@ fn main() {
         })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
-
-    // let window = app.get_window("main");
-    //
-    // #[cfg(target_os = "macos")]
-    // apply_vibrancy(window, NSVisualEffectMaterial::HudWindow);
 }

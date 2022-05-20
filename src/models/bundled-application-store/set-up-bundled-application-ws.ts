@@ -52,7 +52,6 @@ export const setUpBundledApplicationWs = (rootStore: RootStore, appcenterApi: Ap
           subBranches.map(async (branch) => {
             const ws = await AppWebSocketChannel.connect(appcenterApi, branch)
             const sub = ws.events.subscribe((event) => {
-              console.log(event)
               if (event.type === 'buildUpdated') {
                 rootStore.branchStore.branches.get(branch.id)?.setBuild(event.data)
               }

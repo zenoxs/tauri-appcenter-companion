@@ -87,6 +87,10 @@ export class AppWebSocketChannel {
     console.log(`open ws ${this._branch.name}`)
     this._socket.addListener((message) => this._onMessage(message))
     this._method(new WatchRepoMethod())
+    if (this._branch?.lastBuild?.status === 'inProgress') {
+      this._method(new BuildSubscribeMethod(this._branch.lastBuild?.buildId))
+      this._subscribedBuildIds.add(this._branch.lastBuild?.buildId)
+    }
 
     this._heartbeatInterval = setInterval(() => {
       this._socket.send(new WsHeartBeat().toJson())
@@ -95,10 +99,10 @@ export class AppWebSocketChannel {
 
   private _onMessage(message: Message) {
     if (message.type !== 'Text') {
+      console.debug(message)
       return
     }
     const event: WsAppEvent = message.data ? JSON.parse(message.data) : {}
-
     if (event.type === 'buildUpdated') {
       if (event.data.sourceBranch === this._branch.name) {
         if (!this._subscribedBuildIds.has(event.data.id)) {
@@ -108,8 +112,10 @@ export class AppWebSocketChannel {
         // TODO: maybe only emit for current branches
         this._eventSubject.next(event)
       }
-    } else {
+    } else if (event.type === 'logConsoleLines') {
       this._eventSubject.next(event)
+    } else {
+      console.debug(message)
     }
   }
 

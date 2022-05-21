@@ -6,8 +6,8 @@
 #[cfg(target_os = "macos")]
 mod window_ext;
 
-use tauri::{CustomMenuItem, LogicalSize, Menu, MenuItem, Submenu};
-use tauri::{Manager, Size};
+use tauri::Manager;
+use tauri::{CustomMenuItem, Menu, MenuItem, Submenu};
 use tauri_plugin_store::PluginBuilder;
 use tauri_plugin_websocket::TauriWebsocket;
 

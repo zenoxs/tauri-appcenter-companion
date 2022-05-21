@@ -6,15 +6,19 @@
 #[cfg(target_os = "macos")]
 mod window_ext;
 
-use tauri::Manager;
-use tauri::{CustomMenuItem, Menu, MenuItem, Submenu};
+use tauri::{CustomMenuItem, LogicalSize, Menu, MenuItem, Submenu};
+use tauri::{Manager, Size};
 use tauri_plugin_store::PluginBuilder;
 use tauri_plugin_websocket::TauriWebsocket;
 
 #[cfg(target_os = "macos")]
 use window_ext::WindowExt;
+
 #[cfg(target_os = "macos")]
 use window_vibrancy::{apply_vibrancy, NSVisualEffectMaterial};
+
+#[cfg(target_os = "windows")]
+use window_vibrancy::apply_mica;
 
 #[tauri::command]
 async fn frontend_ready(window: tauri::Window) {
@@ -73,6 +77,10 @@ fn main() {
             #[cfg(target_os = "macos")]
             apply_vibrancy(&window, NSVisualEffectMaterial::HudWindow)
                 .expect("Unsupported platform! 'apply_vibrancy' is only supported on macOS");
+
+            #[cfg(target_os = "windows")]
+            apply_mica(&window)
+                .expect("Unsupported platform! 'apply_blur' is only supported on Windows");
 
             #[cfg(target_os = "macos")]
             window.set_transparent_titlebar(true);

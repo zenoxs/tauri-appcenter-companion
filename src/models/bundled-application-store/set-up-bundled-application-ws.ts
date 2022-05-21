@@ -63,4 +63,8 @@ export const setUpBundledApplicationWs = (rootStore: RootStore, appcenterApi: Ap
       })
     )
     .subscribe((subSockets) => (websockets = subSockets))
+
+  window.onbeforeunload = function () {
+    disconectAllWebSockets()
+  }
 }

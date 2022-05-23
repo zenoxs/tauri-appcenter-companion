@@ -10,7 +10,7 @@ import {
   SnapshotOut,
   types
 } from 'mobx-state-tree'
-import { BranchDto } from '../../../services'
+import { ApplicationDto, BranchDto } from '../../../services'
 import { Branch, BranchModel } from '../../branch-store'
 import { withEnvironment } from '../../extensions/with-environment'
 import { withRootStore } from '../../extensions/with-root-store'
@@ -77,11 +77,31 @@ export const ApplicationModel: ApplicationRunType = ApplicationModel$1.props({
   .actions((self) => ({
     fetchBranches: flow(function* () {
       self.isLoading = true
-      const branchesDto: Array<BranchDto> = yield self.environment.appcenterApi.getBranches(
-        self.owner.displayName,
-        self.name,
-        self.token.token
-      )
+      const [applicationDto, branchesDto]: [ApplicationDto, Array<BranchDto>] = yield Promise.all([
+        self.environment.appcenterApi.getApplication(
+          self.owner.displayName,
+          self.name,
+          self.token.token
+        ),
+        self.environment.appcenterApi.getBranches(
+          self.owner.displayName,
+          self.name,
+          self.token.token
+        )
+      ])
+
+      // update self properties
+      self.name = applicationDto.name
+      self.displayName = applicationDto.display_name
+      self.description = applicationDto.description
+      self.iconUrl = applicationDto.icon_url
+      self.os = applicationDto.os
+      self.platform = applicationDto.platform
+
+      // set up owner
+      self.owner = self.rootStore.ownerStore.putOwner(applicationDto.owner)
+
+      // set up branches
       self.branches.clear()
       branchesDto.forEach((branchDdto) => {
         const branch = self.rootStore.branchStore.putBranchDdto(

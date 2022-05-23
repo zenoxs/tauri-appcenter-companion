@@ -26,6 +26,21 @@ export class AppcenterApi {
       .then((res) => res.data)
   }
 
+  getApplication(
+    ownerName: string,
+    applicationName: string,
+    token: string
+  ): Promise<ApplicationDto> {
+    return this._http
+      .get<ApplicationDto>(`apps/${ownerName}/${applicationName}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Token': token
+        }
+      })
+      .then((res) => res.data)
+  }
+
   async getBranches(
     ownerName: string,
     applicationName: string,

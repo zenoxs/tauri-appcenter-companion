@@ -56,35 +56,48 @@ export interface WsAppLogConsoleLinesEvent extends WsAppEventSchema {
 export type WsAppEvent = WsAppBuildUpdatedEvent | WsAppLogConsoleLinesEvent
 
 export class AppWebSocketChannel {
+  static TIMEOUT_RECONNECT = 20 * 1000
   static async connect(appcenterApi: AppcenterApi, branch: Branch): Promise<AppWebSocketChannel> {
+    if (AppWebSocketChannel._openedWebSockets[branch.application!.id]) {
+      return AppWebSocketChannel._openedWebSockets[branch.application!.id]
+    }
+    const socket = await AppWebSocketChannel._createSocket(appcenterApi, branch)
+    const channel = new AppWebSocketChannel(socket, branch, appcenterApi)
+    AppWebSocketChannel._openedWebSockets[branch.application!.id] = channel
+    return channel
+  }
+
+  private static async _createSocket(
+    appcenterApi: AppcenterApi,
+    branch: Branch
+  ): Promise<WebSocket> {
     const wsUrl = await appcenterApi.getWebsocket(
       branch.application!.owner!.displayName,
       branch.application!.name,
       branch.application!.token!.token
     )
-    console.log(wsUrl)
-    if (AppWebSocketChannel._openedWebSockets[branch.application!.id]) {
-      return AppWebSocketChannel._openedWebSockets[branch.application!.id]
-    }
-    const socket = await WebSocket.connect(wsUrl).then((r) => {
-      console.log(r)
-      return r
-    })
-    const channel = new AppWebSocketChannel(socket, branch)
-    AppWebSocketChannel._openedWebSockets[branch.application!.id] = channel
-    return channel
+    const socket = await WebSocket.connect(wsUrl)
+    return socket
   }
 
   // eslint-disable-next-line no-use-before-define
   static readonly _openedWebSockets: Record<string, AppWebSocketChannel> = {}
 
-  private readonly _heartbeatInterval: number
+  private _heartbeatInterval?: number
 
   private _eventSubject = new Subject<WsAppEvent>()
   private _subscribedBuildIds: Set<number> = new Set()
 
-  private constructor(private _socket: WebSocket, private _branch: Branch) {
-    console.log(`open ws ${this._branch.name}`)
+  private constructor(
+    private _socket: WebSocket,
+    private readonly _branch: Branch,
+    private readonly _api: AppcenterApi
+  ) {
+    console.info(`open ws ${this._branch.name}`)
+    this._setUpListeners()
+  }
+
+  private _setUpListeners() {
     this._socket.addListener((message) => this._onMessage(message))
     this._method(new WatchRepoMethod())
     if (this._branch?.lastBuild?.status === 'inProgress') {
@@ -98,8 +111,19 @@ export class AppWebSocketChannel {
   }
 
   private _onMessage(message: Message) {
+    if (message.type === 'Close') {
+      console.warn(message)
+      this._reconnect()
+      return
+    }
     if (message.type !== 'Text') {
       console.debug(message)
+      if (
+        typeof message === 'string' &&
+        (message as string).startsWith('WebSocket protocol error')
+      ) {
+        this._reconnect()
+      }
       return
     }
     const event: WsAppEvent = message.data ? JSON.parse(message.data) : {}
@@ -129,5 +153,27 @@ export class AppWebSocketChannel {
 
   private _method(method: SocketMethod) {
     return this._socket.send(method.toJson())
+  }
+
+  private async _reconnect() {
+    console.warn('try reconnect ws ' + this._branch.application.displayName)
+    this.close()
+      .catch(console.error)
+      .then(
+        () =>
+          new Promise<void>(function (resolve, reject) {
+            setTimeout(function () {
+              resolve()
+            }, AppWebSocketChannel.TIMEOUT_RECONNECT)
+          })
+      )
+      .then(async () => {
+        this._socket = await AppWebSocketChannel._createSocket(this._api, this._branch)
+      })
+      .then(() => this._setUpListeners())
+      .catch((err) => {
+        console.error(err)
+        return this._reconnect()
+      })
   }
 }

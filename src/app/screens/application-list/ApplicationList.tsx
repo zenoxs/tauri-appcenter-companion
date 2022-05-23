@@ -10,6 +10,8 @@ import {
   IColumn,
   IGroup,
   Image,
+  Persona,
+  PersonaSize,
   ProgressIndicator,
   SelectionMode,
   Stack,
@@ -68,7 +70,7 @@ export const ApplicationList = observer(() => {
         }
         return appName
       },
-      minWidth: 100,
+      minWidth: 150,
       maxWidth: 250
     },
     {
@@ -76,7 +78,21 @@ export const ApplicationList = observer(() => {
       name: 'Branch',
       onRender: (item: Branch) => item.name,
       minWidth: 50,
-      maxWidth: 100
+      maxWidth: 80
+    },
+    {
+      key: 'commit',
+      name: 'Commit',
+      onRender: ({ lastCommit }: Branch) => (
+        <Persona
+          size={PersonaSize.size32}
+          showSecondaryText
+          imageUrl={lastCommit.author.avatar_url}
+          text={lastCommit.commit.message}
+          secondaryText={lastCommit.commit.author.name}
+        />
+      ),
+      minWidth: 150
     },
     {
       key: 'build',
@@ -88,7 +104,7 @@ export const ApplicationList = observer(() => {
           return <BuildStatusIndicator status={lastBuild.status} result={lastBuild.result} />
         }
       },
-      minWidth: 50
+      minWidth: 40
     },
     {
       key: 'actions',

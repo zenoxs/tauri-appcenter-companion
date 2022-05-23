@@ -10,7 +10,7 @@ import {
   SnapshotOut,
   types
 } from 'mobx-state-tree'
-import { ApplicationDto, BranchDto } from '../../../services'
+import { ApplicationDto, BranchWithCommitDto } from '../../../services'
 import { Branch, BranchModel } from '../../branch-store'
 import { withEnvironment } from '../../extensions/with-environment'
 import { withRootStore } from '../../extensions/with-root-store'
@@ -77,18 +77,19 @@ export const ApplicationModel: ApplicationRunType = ApplicationModel$1.props({
   .actions((self) => ({
     fetchBranches: flow(function* () {
       self.isLoading = true
-      const [applicationDto, branchesDto]: [ApplicationDto, Array<BranchDto>] = yield Promise.all([
-        self.environment.appcenterApi.getApplication(
-          self.owner.displayName,
-          self.name,
-          self.token.token
-        ),
-        self.environment.appcenterApi.getBranches(
-          self.owner.displayName,
-          self.name,
-          self.token.token
-        )
-      ])
+      const [applicationDto, branchesDto]: [ApplicationDto, Array<BranchWithCommitDto>] =
+        yield Promise.all([
+          self.environment.appcenterApi.getApplication(
+            self.owner.displayName,
+            self.name,
+            self.token.token
+          ),
+          self.environment.appcenterApi.getBranches(
+            self.owner.displayName,
+            self.name,
+            self.token.token
+          )
+        ])
 
       // update self properties
       self.name = applicationDto.name

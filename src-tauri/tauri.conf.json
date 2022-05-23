@@ -45,7 +45,12 @@
       }
     },
     "updater": {
-      "active": false
+      "active": true,
+      "endpoints": [
+        "https://gist.githubusercontent.com/zenoxs/b2bbf1ccb50d279fc29966c371e84d26/raw/cc9381fa54849d17907bb7ec271110aa7fb8f7d3/appcenter-companion-release.json"
+      ],
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEU3NDhGQTU1Q0YyNzY0RQpSV1JPZHZKY3BZOTBEZ3lSb0Z3ZEMwZDdCS2o5NEJPRVZMbmRCWWRzdjdKdzdSQllDK3gwaUxoVwo=",
+      "dialog": true
     },
     "allowlist": {
       "window": {

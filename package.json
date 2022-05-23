@@ -1,7 +1,7 @@
 {
   "name": "tauri-appcenter-companion",
   "private": false,
-  "version": "0.2.0",
+  "version": "0.3.0",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

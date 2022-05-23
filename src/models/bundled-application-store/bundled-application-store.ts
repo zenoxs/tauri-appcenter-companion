@@ -12,6 +12,9 @@ export const BundledApplicationStoreModel = types
     bundledApplications: types.array(BundledApplicationModel)
   })
   .extend(withEnvironment)
+  .volatile((self) => ({
+    initialLoading: false
+  }))
   .actions((self) => ({
     addBundledApplication(bundledApplication: BundledApplicationSnapshotIn) {
       self.bundledApplications.push(bundledApplication)
@@ -26,6 +29,7 @@ export const BundledApplicationStoreModel = types
         })
       })
       yield Promise.all(Object.entries(appsToFetch).map(([, app]) => app.fetchBranches()))
+      self.initialLoading = true
     })
   }))
 

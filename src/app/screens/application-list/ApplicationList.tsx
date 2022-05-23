@@ -20,7 +20,7 @@ import { BuildButton, BuildStatusIndicator } from '../../components'
 
 export const ApplicationList = observer(() => {
   const {
-    bundledApplicationStore: { bundledApplications, refresh },
+    bundledApplicationStore: { bundledApplications, refresh, initialLoading },
     branchStore: { branches }
   } = useStores()
   const navigate = useNavigate()
@@ -36,10 +36,11 @@ export const ApplicationList = observer(() => {
   }
 
   useEffect(() => {
-    onRefresh()
+    // prevent to reload the data every time
+    if (!initialLoading) onRefresh()
     // HACK to get the correct table width
     setRenderTable(true)
-  }, [])
+  }, [initialLoading])
 
   const columns: Array<IColumn> = [
     {

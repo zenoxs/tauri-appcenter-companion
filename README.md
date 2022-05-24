@@ -1,9 +1,13 @@
+# Tauri AppCenter Companion
+
 [![publish](https://github.com/zenoxs/tauri-appcenter-companion/actions/workflows/publish.yml/badge.svg)](https://github.com/zenoxs/tauri-appcenter-companion/actions/workflows/publish.yml)
 [![GitHub license](https://badgen.net/github/release/zenoxs/tauri-appcenter-companion)](https://github.com/zenoxs/tauri-appcenter-companion/releases/latest)
 [![GitHub license](https://badgen.net/badge/os/windows%20%7C%20macOS%20%7C%20linux/black)](https://github.com/zenoxs/tauri-appcenter-companion/releases/latest)
 [![GitHub license](https://badgen.net/badge/license/GPL-3.0/blue)](https://github.com/zenoxs/tauri-appcenter-companion/blob/main/LICENSE)
 
-# Tauri AppCenter Companion
+<p align="center">
+  <img width="150" src="./app-icon.svg">
+</p>
 
 A companion app written with **React** and **Tauri** to help manage your applications on appcenter. This idea is to provide an easy way to group your appcenter's applications into a single view, that way you can easily build all your related application with one click and follow the progress and status.
 

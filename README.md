@@ -20,6 +20,7 @@ A companion app written with **React** and **Tauri** to help you manage your app
 - [x] Start/Cancel your app build
 - [x] Start/Cancel all your apps packaged in a bundled apps
 - [x] The application can work with restricted access tokens (scoped on one app and with full access / read only)
+- [x] Light/dark theme
 - [ ] View the logs of your builds
 - [ ] View all the available builds
 - [ ] Edit / remove a bundled app
@@ -37,7 +38,7 @@ First install the application from the [release page](https://github.com/zenoxs/
 
 Then you will need to create an API Token from your AppCenter account. This can be done in 2 ways:
 
-- From your Appcenter [account settings](https://appcenter.ms/settings/apitokens), **/!\\ remark** if you do so thee generated token will have access to all your apps.
+- From your Appcenter [account settings](https://appcenter.ms/settings/apitokens), **/!\\ remark** if you do so generated token will have access to all your apps.
 - From the settings of your app : https://appcenter.ms/orgs/{owner}/apps/{app-name}/settings/apitokens
 
 ![Create appcenter api token](./screenshots/create-appcenter-api-token.png)
@@ -53,13 +54,9 @@ A bundled app is a logical representation of multiple appcenter's apps. If you r
 
 ## Confidentiality & Security
 
-##
-
 **Q:** Do AC Companion can acccess to my appcenter's account?
 
 **A:** No, the application is designed to be a serverless application. All your data is stored in your local machine. AC Companion only uses the [App Center API](https://openapi.appcenter.ms/) to communicate with your appcenter's account.
-
-##
 
 ---
 

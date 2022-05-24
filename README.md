@@ -6,7 +6,7 @@
 [![GitHub license](https://badgen.net/badge/license/GPL-3.0/blue)](https://github.com/zenoxs/tauri-appcenter-companion/blob/main/LICENSE)
 
 <p align="center">
-  <img width="150" src="./app-icon.svg">
+  <img src="./src-tauri/icons/Square150x150Logo.png" />
 </p>
 
 A companion app written with **React** and **Tauri** to help manage your applications on appcenter. This idea is to provide an easy way to group your appcenter's applications into a single view, that way you can easily build all your related application with one click and follow the progress and status.

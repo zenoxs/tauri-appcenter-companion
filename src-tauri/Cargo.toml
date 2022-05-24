@@ -1,6 +1,6 @@
 [package]
 name = "tauri-appcenter-companion"
-version = "0.3.3"
+version = "0.3.4"
 description = "Companion app for Appcenter"
 authors = ["Amaury CIVIER"]
 license = "GPL-3.0"

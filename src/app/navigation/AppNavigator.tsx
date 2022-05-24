@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {
   CommandButton,
   INavLinkGroup,
@@ -9,6 +9,7 @@ import {
   Theme,
   ThemeContext
 } from '@fluentui/react'
+import { os } from '@tauri-apps/api'
 import { ApplicationList } from '../screens/application-list/ApplicationList'
 import { Routes, Route, useNavigate, useLocation, Location } from 'react-router-dom'
 import './AppNavigator.css'
@@ -50,7 +51,8 @@ const navLinkGroups: INavLinkGroup[] = [
         name: 'Buid',
         url: '/build',
         key: 'build',
-        icon: 'Build'
+        icon: 'Build',
+        disabled: true
       }
     ]
   }
@@ -62,8 +64,18 @@ export const AppNavigator = () => {
   const location = useLocation()
   const state = location.state as { backgroundLocation?: Location }
 
+  // set non transparent background for linux systems
+  const [background, setBackground] = useState<string | undefined>()
+  useEffect(() => {
+    os.type().then((type) => {
+      if (type === 'Linux') {
+        setBackground(theme.semanticColors.bodyStandoutBackground)
+      }
+    })
+  }, [theme])
+
   return (
-    <Stack verticalFill styles={{ root: { height: '100vh', width: '100vw' } }}>
+    <Stack verticalFill styles={{ root: { height: '100vh', width: '100vw', background } }}>
       <div className='titlebar' data-tauri-drag-region style={{ height: '35px' }}></div>
       <Stack className='container' grow horizontal styles={{ root: { display: 'flex' } }}>
         <Stack>

@@ -63,12 +63,15 @@
           "https://api.appcenter.ms/*",
           "https://api.github.com/*"
         ]
+      },
+      "os": {
+        "all": true
       }
     },
     "windows": [
       {
         "title": "AC Companion",
-        "width": 800,
+        "width": 900,
         "height": 600,
         "transparent": true,
         "resizable": true,

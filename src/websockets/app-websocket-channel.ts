@@ -145,9 +145,8 @@ export class AppWebSocketChannel {
 
   readonly events = this._eventSubject.asObservable()
 
-  async close() {
+  async _close() {
     await this._socket.disconnect()
-    this._eventSubject.complete()
     clearInterval(this._heartbeatInterval)
   }
 
@@ -157,7 +156,7 @@ export class AppWebSocketChannel {
 
   private async _reconnect() {
     console.warn('try reconnect ws ' + this._branch.application.displayName)
-    this.close()
+    this._close()
       .catch(console.error)
       .then(
         () =>
@@ -175,5 +174,11 @@ export class AppWebSocketChannel {
         console.error(err)
         return this._reconnect()
       })
+  }
+
+  async close() {
+    // public close differ from private close because it will also terminate the event subject for the consummeer
+    await this._close()
+    this._eventSubject.complete()
   }
 }

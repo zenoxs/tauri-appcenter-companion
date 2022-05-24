@@ -54,20 +54,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "08f9b8508dccb7687a1d6c4ce66b2b0ecef467c94667de27d8d7fe1f8d2a9cdc"
 
 [[package]]
-name = "app"
-version = "0.1.0"
-dependencies = [
- "cocoa",
- "serde",
- "serde_json",
- "tauri",
- "tauri-build",
- "tauri-plugin-store",
- "tauri-plugin-websocket",
- "window-vibrancy",
-]
-
-[[package]]
 name = "atk"
 version = "0.15.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2700,6 +2686,20 @@ dependencies = [
  "webview2-com",
  "windows 0.30.0",
  "zip",
+]
+
+[[package]]
+name = "tauri-appcenter-companion"
+version = "0.3.3"
+dependencies = [
+ "cocoa",
+ "serde",
+ "serde_json",
+ "tauri",
+ "tauri-build",
+ "tauri-plugin-store",
+ "tauri-plugin-websocket",
+ "window-vibrancy",
 ]
 
 [[package]]

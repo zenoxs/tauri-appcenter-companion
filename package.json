@@ -1,7 +1,10 @@
 {
   "name": "tauri-appcenter-companion",
   "private": false,
-  "version": "0.3.2",
+  "repository": "https://github.com/zenoxs/tauri-appcenter-companion",
+  "version": "0.3.3",
+  "license": "GPL-3.0",
+  "author": "Amaury CIVIER",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

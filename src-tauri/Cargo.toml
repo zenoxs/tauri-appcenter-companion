@@ -1,11 +1,11 @@
 [package]
-name = "app"
-version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
-license = ""
-repository = ""
-default-run = "app"
+name = "tauri-appcenter-companion"
+version = "0.3.3"
+description = "Companion app for Appcenter"
+authors = ["Amaury CIVIER"]
+license = "GPL-3.0"
+repository = "https://github.com/zenoxs/tauri-appcenter-companion"
+default-run = "tauri-appcenter-companion"
 edition = "2021"
 rust-version = "1.57"
 

@@ -29,6 +29,13 @@ export const BranchModel = types
   .views((self) => ({
     get isBuildable() {
       return self.application.token.access === 'fullAccess'
+    },
+    get url() {
+      const baseUrl = self.environment.appcenterUrl
+      const ownner = self.application.owner.displayName
+      const application = self.application.name
+      const branch = self.name
+      return `${baseUrl}orgs/${ownner}/apps/${application}/build/branches/${branch}`
     }
   }))
   .actions((self) => ({

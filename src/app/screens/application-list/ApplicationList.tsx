@@ -8,6 +8,7 @@ import {
   DetailsRow,
   GroupHeader,
   IColumn,
+  IconButton,
   IGroup,
   Image,
   Persona,
@@ -19,6 +20,7 @@ import {
 } from '@fluentui/react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { BuildButton, BuildStatusIndicator } from '../../components'
+import { ApplicationMenuButton } from './ApplicationMenuButton'
 
 export const ApplicationList = observer(() => {
   const {
@@ -116,6 +118,7 @@ export const ApplicationList = observer(() => {
           const branch = branches.get(item.id)!
           return (
             <Stack horizontal horizontalAlign='end' grow>
+              <ApplicationMenuButton branch={branch} />
               <BuildButton
                 isBuildable={branch.isBuildable}
                 onBuild={branch.startBuild}
@@ -126,7 +129,7 @@ export const ApplicationList = observer(() => {
           )
         }
       },
-      minWidth: 50
+      minWidth: 100
     }
   ]
 

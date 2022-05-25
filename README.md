@@ -23,7 +23,7 @@ A companion app written with **React** and **Tauri** to help you manage your app
 - [x] Light/dark theme
 - [ ] View the logs of your builds
 - [ ] View all the available builds
-- [ ] Edit / remove a bundled app
+- [x] Edit / remove a bundled app
 
 ## How to use it ?
 

@@ -1,4 +1,5 @@
 import { flow, Instance, SnapshotOut, types } from 'mobx-state-tree'
+import { BundledApplication } from '..'
 import { Application } from '../application-store'
 import { withEnvironment } from '../extensions/extensions'
 import { BundledApplicationModel, BundledApplicationSnapshotIn } from './bundled-application'
@@ -18,6 +19,9 @@ export const BundledApplicationStoreModel = types
   .actions((self) => ({
     addBundledApplication(bundledApplication: BundledApplicationSnapshotIn) {
       self.bundledApplications.push(bundledApplication)
+    },
+    removeBundledApplication(bundledApplication: BundledApplication) {
+      self.bundledApplications.remove(bundledApplication)
     },
     refresh: flow(function* () {
       const appsToFetch: Record<string, Application> = {}

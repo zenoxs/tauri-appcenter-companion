@@ -2,14 +2,14 @@
   "name": "tauri-appcenter-companion",
   "private": false,
   "repository": "https://github.com/zenoxs/tauri-appcenter-companion",
-  "version": "0.3.6",
+  "version": "0.4.0",
   "license": "GPL-3.0",
   "author": "Amaury CIVIER",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "lint": "eslint src --ext .ts,.tsx,.js,.jsx",
+    "lint": "eslint src --ext .ts,.tsx,.js,.jsx --max-warnings=0",
     "tauri": "tauri",
     "tauri:dev": "tauri dev",
     "postinstall": "cd node_modules/tauri-plugin-websocket && yarn && yarn build"

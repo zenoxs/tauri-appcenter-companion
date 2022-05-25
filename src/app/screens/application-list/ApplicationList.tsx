@@ -20,6 +20,7 @@ import {
 import { useNavigate, useLocation } from 'react-router-dom'
 import { BuildButton, BuildStatusIndicator } from '../../components'
 import { ApplicationMenuButton } from './ApplicationMenuButton'
+import { BundledAppMenuButton } from './BundledAppMenuButton'
 
 export const ApplicationList = observer(() => {
   const {
@@ -223,6 +224,7 @@ export const ApplicationList = observer(() => {
                           )}
                         </Stack>
                         <div style={{ paddingRight: 8 }}>
+                          <BundledAppMenuButton bundledApplication={application} />
                           <BuildButton
                             buildStatus={application.status}
                             onBuild={application.startBuild}

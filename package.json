@@ -9,7 +9,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "lint": "eslint src --ext .ts,.tsx,.js,.jsx",
+    "lint": "eslint src --ext .ts,.tsx,.js,.jsx --max-warnings=0",
     "tauri": "tauri",
     "tauri:dev": "tauri dev",
     "postinstall": "cd node_modules/tauri-plugin-websocket && yarn && yarn build"

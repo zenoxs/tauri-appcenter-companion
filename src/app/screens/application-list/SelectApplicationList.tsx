@@ -9,7 +9,7 @@ import {
   SpinnerSize
 } from '@fluentui/react'
 import { useConst } from '@fluentui/react-hooks'
-import { Observer, useObserver } from 'mobx-react-lite'
+import { Observer } from 'mobx-react-lite'
 import React, { useEffect, useState } from 'react'
 import { Branch, BundledApplication, useStores } from '../../../models'
 

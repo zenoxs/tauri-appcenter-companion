@@ -23,6 +23,11 @@ use window_vibrancy::apply_mica;
 #[tauri::command]
 async fn frontend_ready(window: tauri::Window) {
     window.get_window("main").unwrap().show().unwrap();
+    window
+        .get_window("main")
+        .unwrap()
+        .set_decorations(true)
+        .unwrap();
 }
 
 fn main() {

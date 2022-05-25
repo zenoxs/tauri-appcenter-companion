@@ -1,7 +1,7 @@
 {
   "package": {
     "productName": "AC Companion",
-    "version": "0.4.0"
+    "version": "0.4.1"
   },
   "build": {
     "distDir": "../dist",
@@ -78,7 +78,7 @@
         "height": 600,
         "transparent": true,
         "resizable": true,
-        "decorations": true,
+        "decorations": false,
         "fullscreen": false,
         "visible": false,
         "focus": true

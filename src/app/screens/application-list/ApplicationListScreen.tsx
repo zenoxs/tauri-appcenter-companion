@@ -22,7 +22,7 @@ import { BuildButton, BuildStatusIndicator } from '../../components'
 import { ApplicationMenuButton } from './ApplicationMenuButton'
 import { BundledAppMenuButton } from './BundledAppMenuButton'
 
-export const ApplicationList = observer(() => {
+export const ApplicationListScreen = observer(() => {
   const {
     bundledApplicationStore: { bundledApplications, refresh, initialLoading },
     branchStore: { branches }

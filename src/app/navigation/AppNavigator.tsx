@@ -10,7 +10,7 @@ import {
   ThemeContext
 } from '@fluentui/react'
 import { os } from '@tauri-apps/api'
-import { ApplicationList } from '../screens/application-list/ApplicationList'
+import { ApplicationListScreen } from '../screens/application-list/ApplicationListScreen'
 import { Routes, Route, useNavigate, useLocation, Location } from 'react-router-dom'
 import './AppNavigator.css'
 import { APITokenListModal } from '../screens/api-token/APITokenListModal'
@@ -114,7 +114,7 @@ export const AppNavigator = () => {
           tokens={{ padding: theme.spacing.m }}
         >
           <Routes location={state?.backgroundLocation ?? location}>
-            <Route path='/' element={<ApplicationList />} />
+            <Route path='/' element={<ApplicationListScreen />} />
           </Routes>
           {state?.backgroundLocation && (
             <Routes>

@@ -42,6 +42,12 @@ export const BundledAppMenuButton = ({ bundledApplication }: BundledAppMenuButto
           shouldFocusOnMount: true,
           items: [
             {
+              key: 'link',
+              text: 'Add application',
+              iconProps: { iconName: 'AddLink' },
+              onClick: toggleHideReemodeDialog
+            },
+            {
               key: 'remove',
               text: 'Remove',
               iconProps: { iconName: 'Delete' },

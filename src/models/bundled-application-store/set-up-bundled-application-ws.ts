@@ -1,5 +1,5 @@
 import { onSnapshot } from 'mobx-state-tree'
-import { Subscription, Subject, concatMap, distinct } from 'rxjs'
+import { Subscription, Subject, concatMap, distinct, debounceTime } from 'rxjs'
 import { BundledApplicationStoreSnapshot } from '..'
 import { AppcenterApi } from '../../services'
 import { AppWebSocketChannel } from '../../websockets/app-websocket-channel'
@@ -28,6 +28,7 @@ export const setUpBundledApplicationWs = (rootStore: RootStore, appcenterApi: Ap
   storeSnapshot
     .pipe(
       distinct(),
+      debounceTime(100),
       concatMap((snapshot) => {
         return disconectAllWebSockets().then(() => snapshot)
       }),

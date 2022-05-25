@@ -1,7 +1,7 @@
 import { Instance, SnapshotIn, SnapshotOut, types } from 'mobx-state-tree'
 import { v4 as uuid } from 'uuid'
 import { BuildResult, BuildStatus } from '../../../services'
-import { BranchModel } from '../../branch-store'
+import { Branch, BranchModel } from '../../branch-store'
 
 /**
  * Model description here for TypeScript hints.
@@ -47,6 +47,9 @@ export const BundledApplicationModel = types
     },
     cancelBuild() {
       self.branches.forEach((b) => b?.cancelBuild())
+    },
+    removeBranch(branch: Branch) {
+      self.branches.remove(branch)
     }
   }))
 

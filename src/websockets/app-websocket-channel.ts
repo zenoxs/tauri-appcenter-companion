@@ -112,8 +112,11 @@ export class AppWebSocketChannel {
 
   private _onMessage(message: Message) {
     if (message.type === 'Close') {
-      console.warn(message)
-      this._reconnect()
+      // If not disconnected by client
+      console.debug(message)
+      if (message.data?.code !== 1000) {
+        this._reconnect()
+      }
       return
     }
     if (message.type !== 'Text') {
@@ -178,6 +181,7 @@ export class AppWebSocketChannel {
 
   async close() {
     // public close differ from private close because it will also terminate the event subject for the consummeer
+    delete AppWebSocketChannel._openedWebSockets[this._branch.application.id]
     await this._close()
     this._eventSubject.complete()
   }

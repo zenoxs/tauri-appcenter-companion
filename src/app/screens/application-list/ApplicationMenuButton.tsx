@@ -1,13 +1,17 @@
 import React from 'react'
 import { IconButton } from '@fluentui/react'
-import { Branch } from '../../../models'
+import { Branch, BundledApplication } from '../../../models'
 import { open } from '@tauri-apps/api/shell'
 
 export interface ApplicationMenuButtonProps {
   branch: Branch
+  bundledApplication: BundledApplication
 }
 
-export const ApplicationMenuButton = ({ branch }: ApplicationMenuButtonProps) => {
+export const ApplicationMenuButton = ({
+  branch,
+  bundledApplication
+}: ApplicationMenuButtonProps) => {
   return (
     <IconButton
       iconProps={{ iconName: 'More' }}
@@ -26,7 +30,7 @@ export const ApplicationMenuButton = ({ branch }: ApplicationMenuButtonProps) =>
             key: 'remove',
             text: 'Remove',
             iconProps: { iconName: 'Delete' },
-            onClick: () => console.log('New clicked')
+            onClick: () => bundledApplication.removeBranch(branch)
           }
         ]
       }}

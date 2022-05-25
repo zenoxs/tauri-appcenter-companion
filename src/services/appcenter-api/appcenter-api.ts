@@ -1,6 +1,6 @@
 import { Body } from '@tauri-apps/api/http'
 import { HttpClient } from '../http-client/http-client'
-import { ApplicationDto, BranchDto } from './appcenter-api.type'
+import { ApplicationDto, BranchDto, BranchWithCommitDto, CommitLiteDto } from './appcenter-api.type'
 
 export class AppcenterApi {
   private readonly _http: HttpClient
@@ -26,11 +26,26 @@ export class AppcenterApi {
       .then((res) => res.data)
   }
 
+  getApplication(
+    ownerName: string,
+    applicationName: string,
+    token: string
+  ): Promise<ApplicationDto> {
+    return this._http
+      .get<ApplicationDto>(`apps/${ownerName}/${applicationName}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Token': token
+        }
+      })
+      .then((res) => res.data)
+  }
+
   async getBranches(
     ownerName: string,
     applicationName: string,
     token: string
-  ): Promise<Array<BranchDto>> {
+  ): Promise<Array<BranchWithCommitDto>> {
     return this._http
       .get<Array<BranchDto>>(`apps/${ownerName}/${applicationName}/branches`, {
         headers: {
@@ -38,11 +53,21 @@ export class AppcenterApi {
           'X-API-Token': token
         }
       })
-      .then((res) => {
+      .then(async (res) => {
         if (!res.ok) {
           return []
         }
-        return res.data
+        const commits = await this.getCommitsBatch(
+          ownerName,
+          applicationName,
+          res.data.map((b) => b.branch.commit.sha),
+          token
+        )
+
+        return res.data.map((b, index) => ({
+          ...b,
+          commit: commits[index]
+        }))
       })
   }
 
@@ -109,5 +134,31 @@ export class AppcenterApi {
       }
     )
     console.log(res)
+  }
+
+  async getCommitsBatch(
+    ownerName: string,
+    applicationName: string,
+    hashes: Array<string>,
+    token: string
+  ): Promise<Array<CommitLiteDto>> {
+    return this._http
+      .get<Array<CommitLiteDto>>(`apps/${ownerName}/${applicationName}/commits/batch`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Token': token
+        },
+        query: {
+          form: 'lite',
+          hashes: hashes.join(',')
+        }
+      })
+      .then((res) => {
+        if (!res.ok) {
+          return []
+        }
+
+        return res.data
+      })
   }
 }

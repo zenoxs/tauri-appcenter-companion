@@ -27,16 +27,16 @@ export const ApplicationStoreModel = types
     fetchApplications: flow(function* (token: string, options?: { withBranches: boolean }) {
       const dto: Array<ApplicationDto> = yield self.environment.appcenterApi.getApplications(token)
       const addedApplications = []
-      for (const applicationDdto of dto) {
-        const owner = self.rootStore.ownerStore.putOwner(applicationDdto.owner)
+      for (const applicationDto of dto) {
+        const owner = self.rootStore.ownerStore.putOwner(applicationDto.owner)
         const addedApplication = self.applications.put({
-          id: applicationDdto.id,
-          name: applicationDdto.name,
-          displayName: applicationDdto.display_name,
-          iconUrl: applicationDdto.icon_url,
-          description: applicationDdto.description,
-          os: applicationDdto.os,
-          platform: applicationDdto.platform,
+          id: applicationDto.id,
+          name: applicationDto.name,
+          displayName: applicationDto.display_name,
+          iconUrl: applicationDto.icon_url,
+          description: applicationDto.description,
+          os: applicationDto.os,
+          platform: applicationDto.platform,
           owner: owner.id,
           token
         })

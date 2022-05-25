@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 66 65" fill="#fff" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <rect x="6.759" y="6.143" width="52.482" height="52.714" rx="6" ry="6" style="stroke: none;"/>
+  <use transform="matrix(1, 0, 0, 1, 12.635929, -9.488667)" xlink:href="#A"/>
+  <symbol id="A" overflow="visible">
+    <path d="M 31.312 58.085 L 41.749 59.651 L 31.312 64 L 0 53.563 L 31.312 58.085 L 31.312 22.251 L 41.749 26.6 L 41.749 59.652 L 31.312 58.085 Z M 10.437 29.209 L 14.438 30.079 L 14.438 36.341 L 20.874 31.819 L 20.874 37.037 L 14.264 40.516 L 20.874 43.995 L 20.874 49.214 L 14.264 44.691 L 14.264 50.953 L 10.437 51.823 L 3.479 45.735 L 3.479 43.126 L 7.48 40.516 L 3.479 37.907 L 3.479 35.298 L 10.437 29.209 Z M 5.566 36.341 L 10.437 38.776 L 10.437 32.688 L 5.566 36.341 Z M 10.437 48.344 L 10.437 42.256 L 5.566 44.691 L 10.437 48.344 Z M 20.874 31.819 L 26.093 33.559 L 26.093 47.475 L 20.874 49.214 L 20.874 31.819 Z" stroke="none" fill="#cb2e62" fill-rule="nonzero" style=""/>
+  </symbol>
+  <text style="fill: rgb(203, 46, 98); font-family: Consolas; font-size: 12px; font-weight: 700; paint-order: fill; stroke: rgba(220, 44, 44, 0); text-transform: capitalize; word-spacing: 6.3px; white-space: pre;" transform="matrix(0.483421, 0, 0, 0.521306, 10.31223, 6.178102)" x="-0.157" y="19.111">COMPANION</text>
+</svg>

@@ -41,6 +41,20 @@ export interface CommitDto {
   sha: string
 }
 
+export interface CommitLiteDto extends CommitDto {
+  author: {
+    avatar_url?: string
+  }
+  commit: {
+    message: string
+    author: {
+      name: string
+      email: string
+      date: string
+    }
+  }
+}
+
 export interface BuildDto {
   id: number
   buildNumber: string
@@ -67,4 +81,8 @@ export interface BranchDto {
   configured: boolean
   lastBuild?: BuildDto
   trigger?: string
+}
+
+export interface BranchWithCommitDto extends BranchDto {
+  commit: CommitLiteDto
 }

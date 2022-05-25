@@ -1,5 +1,5 @@
 import { Instance, SnapshotOut, types } from 'mobx-state-tree'
-import { BranchDto } from '../../services'
+import { BranchWithCommitDto } from '../../services'
 import { Build } from '../build-store'
 import { withEnvironment, withRootStore } from '../extensions/extensions'
 import { BranchModel } from './branch'
@@ -21,7 +21,7 @@ export const BranchStoreModel = types
   .extend(withRootStore)
   .actions((self) => ({
     putBranchDdto: (
-      branchDto: BranchDto,
+      branchDto: BranchWithCommitDto,
       appId: string,
       applicationName: string,
       ownerName: string
@@ -35,7 +35,7 @@ export const BranchStoreModel = types
         id: `${ownerName}_${applicationName}_${branchDto.branch.name}`,
         name: branchDto.branch.name,
         configured: branchDto.configured,
-        lastCommit: branchDto.branch.commit.sha,
+        lastCommit: branchDto.commit,
         application: appId,
         lastBuild: lastBuild?.id
       })

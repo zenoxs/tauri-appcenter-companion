@@ -2,7 +2,9 @@ import { AppcenterApi } from '../services'
 
 export class Environment {
   readonly appcenterApi: AppcenterApi
-  private constructor({ appcenterApi }: Environment) {
+  readonly appcenterUrl: string = 'https://appcenter.ms/'
+
+  private constructor({ appcenterApi }: Omit<Environment, 'appcenterUrl'>) {
     this.appcenterApi = appcenterApi
   }
 

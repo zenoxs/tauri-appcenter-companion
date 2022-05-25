@@ -10,6 +10,8 @@ import {
   IColumn,
   IGroup,
   Image,
+  Persona,
+  PersonaSize,
   ProgressIndicator,
   SelectionMode,
   Stack,
@@ -17,10 +19,12 @@ import {
 } from '@fluentui/react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { BuildButton, BuildStatusIndicator } from '../../components'
+import { ApplicationMenuButton } from './ApplicationMenuButton'
+import { BundledAppMenuButton } from './BundledAppMenuButton'
 
-export const ApplicationList = observer(() => {
+export const ApplicationListScreen = observer(() => {
   const {
-    bundledApplicationStore: { bundledApplications, refresh },
+    bundledApplicationStore: { bundledApplications, refresh, initialLoading },
     branchStore: { branches }
   } = useStores()
   const navigate = useNavigate()
@@ -36,10 +40,32 @@ export const ApplicationList = observer(() => {
   }
 
   useEffect(() => {
-    onRefresh()
+    // prevent to reload the data every time
+    if (!initialLoading) onRefresh()
     // HACK to get the correct table width
     setRenderTable(true)
-  }, [])
+  }, [initialLoading])
+
+  let items: Array<Branch> = []
+  const groups: Array<IGroup> = []
+  for (const application of bundledApplications) {
+    // force reload on application deps change
+    const branches = application.branches.map((b) => ({
+      ...b,
+      application: b?.application,
+      lastBuild: b?.lastBuild
+    })) as Array<Branch>
+    groups.push({
+      key: application.id,
+      name: application.name,
+      data: application,
+      startIndex: items.length,
+      count: branches.length,
+      level: 0,
+      isCollapsed: false
+    } as IGroup)
+    items = items.concat(branches)
+  }
 
   const columns: Array<IColumn> = [
     {
@@ -67,7 +93,7 @@ export const ApplicationList = observer(() => {
         }
         return appName
       },
-      minWidth: 100,
+      minWidth: 150,
       maxWidth: 250
     },
     {
@@ -75,7 +101,21 @@ export const ApplicationList = observer(() => {
       name: 'Branch',
       onRender: (item: Branch) => item.name,
       minWidth: 50,
-      maxWidth: 100
+      maxWidth: 80
+    },
+    {
+      key: 'commit',
+      name: 'Commit',
+      onRender: ({ lastCommit }: Branch) => (
+        <Persona
+          size={PersonaSize.size32}
+          showSecondaryText
+          imageUrl={lastCommit.author.avatar_url}
+          text={lastCommit.commit.message}
+          secondaryText={lastCommit.commit.author.name}
+        />
+      ),
+      minWidth: 150
     },
     {
       key: 'build',
@@ -87,52 +127,32 @@ export const ApplicationList = observer(() => {
           return <BuildStatusIndicator status={lastBuild.status} result={lastBuild.result} />
         }
       },
-      minWidth: 50
+      minWidth: 40
     },
     {
       key: 'actions',
       name: 'Actions',
-      onRender: (item: Branch) => {
+      onRender: (item: Branch, index) => {
         const lastBuild = item.lastBuild
-
-        if (lastBuild?.id) {
-          const branch = branches.get(item.id)!
-          return (
-            <Stack horizontal horizontalAlign='end' grow>
+        const group = groups.find((g) => g.startIndex <= index! && g.startIndex + g.count > index!)!
+        const branch = branches.get(item.id)!
+        return (
+          <Stack horizontal horizontalAlign='end' grow>
+            <ApplicationMenuButton bundledApplication={group.data} branch={branch} />
+            {lastBuild && (
               <BuildButton
                 isBuildable={branch.isBuildable}
                 onBuild={branch.startBuild}
                 onCancelBuild={branch.cancelBuild}
                 buildStatus={lastBuild.status}
               />
-            </Stack>
-          )
-        }
+            )}
+          </Stack>
+        )
       },
-      minWidth: 50
+      minWidth: 70
     }
   ]
-
-  let items: Array<Branch> = []
-  const groups: Array<IGroup> = []
-  for (const application of bundledApplications) {
-    // force reload on application deps change
-    const branches = application.branches.map((b) => ({
-      ...b,
-      application: b?.application,
-      lastBuild: b?.lastBuild
-    })) as Array<Branch>
-    groups.push({
-      key: application.id,
-      name: application.name,
-      data: application,
-      startIndex: items.length,
-      count: branches.length,
-      level: 0,
-      isCollapsed: false
-    } as IGroup)
-    items = items.concat(branches)
-  }
 
   return (
     <>
@@ -204,6 +224,7 @@ export const ApplicationList = observer(() => {
                           )}
                         </Stack>
                         <div style={{ paddingRight: 8 }}>
+                          <BundledAppMenuButton bundledApplication={application} />
                           <BuildButton
                             buildStatus={application.status}
                             onBuild={application.startBuild}
@@ -218,10 +239,6 @@ export const ApplicationList = observer(() => {
               )
             }}
             columns={columns}
-            ariaLabelForSelectAllCheckbox='Toggle selection for all items'
-            ariaLabelForSelectionColumn='Toggle selection'
-            checkButtonAriaLabel='select row'
-            checkButtonGroupAriaLabel='select section'
           />
         )}
       </div>

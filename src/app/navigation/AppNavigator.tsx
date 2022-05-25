@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {
   CommandButton,
   INavLinkGroup,
@@ -9,11 +9,13 @@ import {
   Theme,
   ThemeContext
 } from '@fluentui/react'
-import { ApplicationList } from '../screens/application-list/ApplicationList'
+import { os } from '@tauri-apps/api'
+import { ApplicationListScreen } from '../screens/application-list/ApplicationListScreen'
 import { Routes, Route, useNavigate, useLocation, Location } from 'react-router-dom'
 import './AppNavigator.css'
 import { APITokenListModal } from '../screens/api-token/APITokenListModal'
 import { AddBundledAppDialog } from '../screens/application-list/AddBundledAppDialog'
+import { useConst } from '@fluentui/react-hooks'
 
 const navStyles = (theme: Theme): Partial<INavStyles> => ({
   root: {
@@ -50,7 +52,8 @@ const navLinkGroups: INavLinkGroup[] = [
         name: 'Buid',
         url: '/build',
         key: 'build',
-        icon: 'Build'
+        icon: 'Build',
+        disabled: true
       }
     ]
   }
@@ -61,10 +64,21 @@ export const AppNavigator = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const state = location.state as { backgroundLocation?: Location }
+  const titleBarHeight = useConst('35px')
+
+  // set non transparent background for linux systems
+  const [background, setBackground] = useState<string | undefined>()
+  useEffect(() => {
+    os.type().then((type) => {
+      if (type === 'Linux') {
+        setBackground(theme.semanticColors.bodyStandoutBackground)
+      }
+    })
+  }, [theme])
 
   return (
-    <Stack verticalFill styles={{ root: { height: '100vh', width: '100vw' } }}>
-      <div className='titlebar' data-tauri-drag-region style={{ height: '35px' }}></div>
+    <Stack verticalFill styles={{ root: { height: '100vh', width: '100vw', background } }}>
+      <div className='titlebar' data-tauri-drag-region style={{ height: titleBarHeight }}></div>
       <Stack className='container' grow horizontal styles={{ root: { display: 'flex' } }}>
         <Stack>
           <Stack.Item align='center'>
@@ -96,13 +110,15 @@ export const AppNavigator = () => {
             root: {
               backgroundColor: theme.semanticColors.bodyBackground,
               overflowX: 'hidden',
+              overflowY: 'auto',
+              height: `calc(100vh - ${titleBarHeight})`,
               borderRadius: '10px 0px 0px 0px'
             }
           }}
           tokens={{ padding: theme.spacing.m }}
         >
           <Routes location={state?.backgroundLocation ?? location}>
-            <Route path='/' element={<ApplicationList />} />
+            <Route path='/' element={<ApplicationListScreen />} />
           </Routes>
           {state?.backgroundLocation && (
             <Routes>

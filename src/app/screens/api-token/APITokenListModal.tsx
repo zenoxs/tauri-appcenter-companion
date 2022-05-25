@@ -30,7 +30,6 @@ const contentStyles = mergeStyleSets({
     {
       flex: '1 1 auto',
       borderTop: `4px solid ${theme.palette.themePrimary}`,
-      color: theme.palette.neutralPrimary,
       display: 'flex',
       alignItems: 'center',
       fontWeight: FontWeights.semibold,
@@ -44,13 +43,9 @@ const contentStyles = mergeStyleSets({
 
 const iconButtonStyles: Partial<IButtonStyles> = {
   root: {
-    color: theme.palette.neutralPrimary,
     marginLeft: 'auto',
     marginTop: '4px',
     marginRight: '2px'
-  },
-  rootHovered: {
-    color: theme.palette.neutralDark
   }
 }
 

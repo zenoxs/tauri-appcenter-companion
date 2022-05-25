@@ -1,11 +1,11 @@
 [package]
-name = "app"
-version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
-license = ""
-repository = ""
-default-run = "app"
+name = "tauri-appcenter-companion"
+version = "0.4.0"
+description = "Companion app for Appcenter"
+authors = ["Amaury CIVIER"]
+license = "GPL-3.0"
+repository = "https://github.com/zenoxs/tauri-appcenter-companion"
+default-run = "tauri-appcenter-companion"
 edition = "2021"
 rust-version = "1.57"
 
@@ -18,7 +18,7 @@ tauri-build = { version = "1.0.0-rc.8", features = [] }
 serde_json = "1.0"
 window-vibrancy = "0.1.2"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.0.0-rc.10", features = ["http-all", "macos-private-api", "window-start-dragging"] }
+tauri = { version = "1.0.0-rc.10", features = ["http-all", "macos-private-api", "os-all", "shell-open", "updater", "window-start-dragging"] }
 
 [target."cfg(target_os = \"macos\")".dependencies]
 cocoa = "0.24"

@@ -1,6 +1,6 @@
 import { IObjectWithKey } from '@fluentui/react'
 import { flow, Instance, SnapshotOut, types } from 'mobx-state-tree'
-import { BuildDto } from '../../../services'
+import { BuildDto, CommitLiteDto } from '../../../services'
 import { ApplicationModel, ApplicationRunType } from '../../application-store'
 import { BuildModel } from '../../build-store'
 import { withEnvironment } from '../../extensions/with-environment'
@@ -15,7 +15,7 @@ export const BranchModel = types
     id: types.identifier,
     name: types.string,
     configured: types.boolean,
-    lastCommit: types.string,
+    lastCommit: types.frozen<CommitLiteDto>(),
     lastBuild: types.safeReference(BuildModel),
     application: types.reference(types.late((): ApplicationRunType => ApplicationModel))
   })
@@ -29,6 +29,13 @@ export const BranchModel = types
   .views((self) => ({
     get isBuildable() {
       return self.application.token.access === 'fullAccess'
+    },
+    get url() {
+      const baseUrl = self.environment.appcenterUrl
+      const ownner = self.application.owner.displayName
+      const application = self.application.name
+      const branch = self.name
+      return `${baseUrl}orgs/${ownner}/apps/${application}/build/branches/${branch}`
     }
   }))
   .actions((self) => ({
@@ -40,7 +47,7 @@ export const BranchModel = types
         ownerName: self.application.owner.displayName,
         applicationName: self.application.name,
         branchName: self.name,
-        commit: self.lastCommit,
+        commit: self.lastCommit.sha,
         token: self.application.token.token
       })
     }),

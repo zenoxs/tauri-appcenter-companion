@@ -15,6 +15,7 @@ import { Routes, Route, useNavigate, useLocation, Location } from 'react-router-
 import './AppNavigator.css'
 import { APITokenListModal } from '../screens/api-token/APITokenListModal'
 import { AddBundledAppDialog } from '../screens/application-list/AddBundledAppDialog'
+import { useConst } from '@fluentui/react-hooks'
 
 const navStyles = (theme: Theme): Partial<INavStyles> => ({
   root: {
@@ -63,6 +64,7 @@ export const AppNavigator = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const state = location.state as { backgroundLocation?: Location }
+  const titleBarHeight = useConst('35px')
 
   // set non transparent background for linux systems
   const [background, setBackground] = useState<string | undefined>()
@@ -76,7 +78,7 @@ export const AppNavigator = () => {
 
   return (
     <Stack verticalFill styles={{ root: { height: '100vh', width: '100vw', background } }}>
-      <div className='titlebar' data-tauri-drag-region style={{ height: '35px' }}></div>
+      <div className='titlebar' data-tauri-drag-region style={{ height: titleBarHeight }}></div>
       <Stack className='container' grow horizontal styles={{ root: { display: 'flex' } }}>
         <Stack>
           <Stack.Item align='center'>
@@ -108,6 +110,8 @@ export const AppNavigator = () => {
             root: {
               backgroundColor: theme.semanticColors.bodyBackground,
               overflowX: 'hidden',
+              overflowY: 'auto',
+              height: `calc(100vh - ${titleBarHeight})`,
               borderRadius: '10px 0px 0px 0px'
             }
           }}

@@ -7,6 +7,10 @@ body {
   background-color: rgba(255, 255, 255, 0.4) !important;
 }
 
+html {
+  overflow: hidden;
+}
+
 @media (prefers-color-scheme: dark) {
   body {
     background-color: rgba(0, 0, 0, 0.6) !important;

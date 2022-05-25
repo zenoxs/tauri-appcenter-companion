@@ -6,12 +6,14 @@ import {
   DialogType,
   PrimaryButton,
   Stack,
-  TextField
+  TextField,
+  Selection
 } from '@fluentui/react'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { BundledApplicationSnapshotIn, useStores } from '../../../models'
+import { Branch, BundledApplicationSnapshotIn, useStores } from '../../../models'
 import { SelectApplicationList } from './SelectApplicationList'
+import { useConst } from '@fluentui/react-hooks'
 
 export const AddBundledAppDialog = () => {
   const {
@@ -33,6 +35,18 @@ export const AddBundledAppDialog = () => {
     register('branches')
     return () => unregister('branches')
   }, [register])
+
+  const selection = useConst(
+    () =>
+      new Selection<Branch>({
+        onSelectionChanged: () => {
+          setValue(
+            'branches',
+            selection.getSelection().map((branch) => branch.id)
+          )
+        }
+      })
+  )
 
   const onDismiss = () => {
     navigate(-1)
@@ -65,9 +79,7 @@ export const AddBundledAppDialog = () => {
             {...register('name', { required: { value: true, message: 'Name is required' } })}
             errorMessage={errors.name?.message}
           />
-          <SelectApplicationList
-            onSelectionChanged={(brancheIds) => setValue('branches', brancheIds)}
-          />
+          <SelectApplicationList selection={selection} />
         </Stack>
         <DialogFooter>
           <PrimaryButton type='submit' text='Save' />

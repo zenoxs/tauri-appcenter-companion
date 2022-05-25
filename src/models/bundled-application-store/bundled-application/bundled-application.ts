@@ -42,6 +42,12 @@ export const BundledApplicationModel = types
     }
   }))
   .actions((self) => ({
+    addBranch(branch: Branch) {
+      self.branches.push(branch)
+    },
+    addBranches(branches: Branch[]) {
+      self.branches.push(...branches)
+    },
     startBuild() {
       self.branches.forEach((b) => b?.startBuild())
     },

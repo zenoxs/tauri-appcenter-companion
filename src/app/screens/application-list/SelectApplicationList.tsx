@@ -9,30 +9,25 @@ import {
   SpinnerSize
 } from '@fluentui/react'
 import { useConst } from '@fluentui/react-hooks'
-import { useObserver } from 'mobx-react-lite'
+import { Observer, useObserver } from 'mobx-react-lite'
 import React, { useEffect, useState } from 'react'
-import { Branch, useStores } from '../../../models'
+import { Branch, BundledApplication, useStores } from '../../../models'
 
 export interface SelectApplicationListProps {
-  onSelectionChanged: (brancheIds: Array<string>) => void
+  currentBundledApplication?: BundledApplication
+  selection: Selection
 }
 
-export const SelectApplicationList = ({ onSelectionChanged }: SelectApplicationListProps) => {
+export const SelectApplicationList = ({
+  currentBundledApplication,
+  selection
+}: SelectApplicationListProps) => {
   const {
     applicationStore: { fetchApplications, applicationList },
     tokenStore: { tokens }
   } = useStores()
 
   const [isLoading, setIsLoading] = useState(true)
-
-  const selection = useConst(
-    () =>
-      new Selection({
-        onSelectionChanged: () => {
-          onSelectionChanged((selection.getSelection() as Array<Branch>).map((b) => b.id))
-        }
-      })
-  )
 
   const columns = useConst<Array<IColumn>>([
     {
@@ -60,53 +55,66 @@ export const SelectApplicationList = ({ onSelectionChanged }: SelectApplicationL
     ).finally(() => setIsLoading(false))
   }, [])
 
-  return useObserver(() => {
-    const [items, groups] = (() => {
-      let items: Array<Branch> = []
-      const groups: Array<IGroup> = []
-      for (const application of applicationList) {
-        const branches = application.configuredBranches
-        groups.push({
-          key: application.id,
-          name: application.displayName,
-          startIndex: items.length,
-          count: branches.length,
-          level: 0,
-          isCollapsed: true
-        })
-        items = items.concat(branches)
-      }
+  return (
+    <Observer>
+      {() => {
+        const blackListBranches: Array<Branch> =
+          (currentBundledApplication?.branches as Array<Branch>) ?? []
+        const [items, groups] = (() => {
+          let items: Array<Branch> = []
+          const groups: Array<IGroup> = []
+          for (const application of applicationList) {
+            const branches = application.configuredBranches.filter(
+              (b) => !blackListBranches.includes(b)
+            )
+            groups.push({
+              key: application.id,
+              name: application.displayName,
+              startIndex: items.length,
+              count: branches.length,
+              level: 0,
+              isCollapsed: true
+            })
+            items = items.concat(branches)
+          }
 
-      return [items, groups]
-    })()
+          return [items, groups]
+        })()
 
-    return isLoading ? (
-      // eslint-disable-next-line react/react-in-jsx-scope
-      <Spinner size={SpinnerSize.large} label='Fetching applications...' />
-    ) : (
-      <DetailsList
-        styles={{ root: { flex: 1 } }}
-        selection={selection}
-        items={items}
-        groups={groups}
-        columns={columns}
-        ariaLabelForSelectAllCheckbox='Toggle selection for all items'
-        ariaLabelForSelectionColumn='Toggle selection'
-        checkButtonAriaLabel='select row'
-        checkButtonGroupAriaLabel='select section'
-        onRenderDetailsHeader={(props?: IDetailsHeaderProps) => (
-          <DetailsHeader {...props!} ariaLabelForToggleAllGroupsButton={'Expand collapse groups'} />
-        )}
-        groupProps={{
-          showEmptyGroups: true
-        }}
-        onRenderItemColumn={(item?: Branch, index?: number, column?: IColumn) => {
-          const value =
-            item && column && column.fieldName ? item[column.fieldName as keyof Branch] || '' : ''
+        return isLoading ? (
+          // eslint-disable-next-line react/react-in-jsx-scope
+          <Spinner size={SpinnerSize.large} label='Fetching applications...' />
+        ) : (
+          <DetailsList
+            styles={{ root: { flex: 1 } }}
+            selection={selection}
+            items={items}
+            groups={groups}
+            columns={columns}
+            ariaLabelForSelectAllCheckbox='Toggle selection for all items'
+            ariaLabelForSelectionColumn='Toggle selection'
+            checkButtonAriaLabel='select row'
+            checkButtonGroupAriaLabel='select section'
+            onRenderDetailsHeader={(props?: IDetailsHeaderProps) => (
+              <DetailsHeader
+                {...props!}
+                ariaLabelForToggleAllGroupsButton={'Expand collapse groups'}
+              />
+            )}
+            groupProps={{
+              showEmptyGroups: true
+            }}
+            onRenderItemColumn={(item?: Branch, index?: number, column?: IColumn) => {
+              const value =
+                item && column && column.fieldName
+                  ? item[column.fieldName as keyof Branch] || ''
+                  : ''
 
-          return <div data-is-focusable={true}>{value}</div>
-        }}
-      />
-    )
-  })
+              return <div data-is-focusable={true}>{value}</div>
+            }}
+          />
+        )
+      }}
+    </Observer>
+  )
 }

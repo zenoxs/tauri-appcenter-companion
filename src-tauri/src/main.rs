@@ -93,6 +93,6 @@ fn main() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![frontend_ready])
-        .run(tauri::generate_context!())
+        .run(ctx)
         .expect("error while running tauri application");
 }

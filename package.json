@@ -2,7 +2,7 @@
   "name": "tauri-appcenter-companion",
   "private": false,
   "repository": "https://github.com/zenoxs/tauri-appcenter-companion",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "license": "GPL-3.0",
   "author": "Amaury CIVIER",
   "scripts": {
@@ -27,7 +27,7 @@
     "react-hook-form": "^7.31.0",
     "react-router-dom": "6",
     "rxjs": "^7.5.5",
-    "tauri-plugin-store-api": "github:tauri-apps/tauri-plugin-store#4a5a8fb54e62bc0d0e07007b83101c3fe5cf24ba",
+    "tauri-plugin-store-api": "https://github.com/tauri-apps/tauri-plugin-store#dev",
     "tauri-plugin-websocket": "github:tauri-apps/tauri-apps/tauri-plugin-websocket#53c9a3ffc37cd178928d4f6c3443f4c1beb63962",
     "uuid": "^8.3.2"
   },

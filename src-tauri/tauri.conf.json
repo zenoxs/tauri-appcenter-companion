@@ -14,7 +14,7 @@
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "com.zenox.appcenter_companion",
+      "identifier": "com.zenox.appcenter-companion",
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
@@ -78,7 +78,7 @@
         "height": 600,
         "transparent": true,
         "resizable": true,
-        "decorations": false,
+        "decorations": true,
         "fullscreen": false,
         "visible": false,
         "focus": true

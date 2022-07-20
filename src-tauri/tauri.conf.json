@@ -78,7 +78,7 @@
         "height": 600,
         "transparent": true,
         "resizable": true,
-        "decorations": false,
+        "decorations": true,
         "fullscreen": false,
         "visible": false,
         "focus": true
